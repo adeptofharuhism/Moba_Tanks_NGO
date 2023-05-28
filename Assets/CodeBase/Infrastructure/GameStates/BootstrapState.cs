@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using Assets.CodeBase.Infrastructure.Services;
+using Assets.CodeBase.Infrastructure.StateMachine;
 
 namespace Assets.CodeBase.Infrastructure.GameStates
 {
@@ -7,10 +7,12 @@ namespace Assets.CodeBase.Infrastructure.GameStates
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
+        private readonly AllServices _services;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader) {
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices services) {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
+            _services = services;
 
             RegisterServices();
         }
@@ -24,12 +26,11 @@ namespace Assets.CodeBase.Infrastructure.GameStates
         }
 
         private void OnLoaded() {
-            Debug.Log("Initialized");
             _stateMachine.Enter<LoadLevelState, string>(Constants.SceneNames.Main);
         }
 
         private void RegisterServices() {
-
+            _services.RegisterSingle<IStateMachine>(_stateMachine);
         }
     }
 }
