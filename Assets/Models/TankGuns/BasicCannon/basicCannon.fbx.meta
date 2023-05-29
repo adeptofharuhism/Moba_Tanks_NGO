@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 68f6840a3e888e74492f06cb59af1545
+guid: 5931c2aa17be9584896667b6e397f813
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: BaseCannonBarrelTex
+    second: {fileID: 2800000, guid: f1b2858d668176c41a0d6da2a1ff4676, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: BaseCannonMantletTex
+    second: {fileID: 2800000, guid: d527673fc49c8514584bb1ea7db63d29, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

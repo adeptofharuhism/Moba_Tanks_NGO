@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: e8005b8148c133c479b20d409ee499fa
+guid: 68f6840a3e888e74492f06cb59af1545
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: BMP_tex
+    second: {fileID: 2800000, guid: 797a23be2f82827419a1445619aca8aa, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: PlatformTex
+    second: {fileID: 2800000, guid: 113135d38eb71084ebcdd3dd34ed3f41, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: TrackCylinderTex
+    second: {fileID: 2800000, guid: 4476b53781454a5419d07ff9dcf84b7b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: TracksTex
+    second: {fileID: 2800000, guid: 68ca15d3701a42d4e91917d97bcf0545, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
