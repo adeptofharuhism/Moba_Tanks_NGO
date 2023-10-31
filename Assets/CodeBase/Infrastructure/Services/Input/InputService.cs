@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.CodeBase.Infrastructure.Services.Input
 {
@@ -21,10 +20,10 @@ namespace Assets.CodeBase.Infrastructure.Services.Input
             _controls.Character.Move.canceled += _ => MovementCancelled?.Invoke();
         }
 
-        public void Enable() => 
+        public void Enable() =>
             _controls.Enable();
 
-        public void Disable() => 
+        public void Disable() =>
             _controls.Disable();
     }
 }

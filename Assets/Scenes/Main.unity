@@ -655,7 +655,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556661481}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.25, y: 1.1262449, z: 1.3917935}
+  m_LocalPosition: {x: -0.64, y: 1.1262449, z: -4.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2198,7 +2198,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1933663113}
-  - component: {fileID: 1933663114}
+  - component: {fileID: 1933663116}
   - component: {fileID: 1933663115}
   m_Layer: 0
   m_Name: Character
@@ -2223,31 +2223,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1933663114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1933663112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c544bbb01b0af4f4e9fc5ea7d34545dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _carRigidBody: {fileID: 1933663115}
-  _wheelRestDistance: 0.75
-  _wheelSpringStrength: 100
-  _wheelSpringDamper: 15
-  _wheelDiameter: 0.54
-  _carCollisionLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  _carWheelTransforms:
-  - {fileID: 741449812}
-  - {fileID: 2128888851}
-  - {fileID: 1057897217}
-  - {fileID: 1158153964}
 --- !u!54 &1933663115
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2264,6 +2239,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1933663116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933663112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40b90e7037e27d4ea60af1931b63461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterRigidBody: {fileID: 1933663115}
+  _wheelTransforms:
+    CharacterWheelTransformsUnrotated:
+    - {fileID: 741449812}
+    - {fileID: 2128888851}
+    - {fileID: 1057897217}
+    - {fileID: 1158153964}
+    CharacterWheelTransformsRotatedStraight: []
+    CharacterWheelTransformsRotatedBackwards: []
+  _movementData: {fileID: 11400000, guid: f63f8205f42354a448fbcd359c78c4fc, type: 2}
 --- !u!1 &1996118875
 GameObject:
   m_ObjectHideFlags: 0
