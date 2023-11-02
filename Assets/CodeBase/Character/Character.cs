@@ -46,7 +46,7 @@ namespace Assets.CodeBase.Character
     [Serializable]
     public class CharacterWheelTransforms
     {
-        public List<Transform> CharacterWheelTransformsUnrotated;
+        public List<Transform> CharacterWheelTransformsAccelerated;
         public List<Transform> CharacterWheelTransformsRotatedStraight;
         public List<Transform> CharacterWheelTransformsRotatedBackwards;
     }

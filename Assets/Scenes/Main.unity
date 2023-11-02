@@ -2253,12 +2253,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterRigidBody: {fileID: 1933663115}
   _wheelTransforms:
-    CharacterWheelTransformsUnrotated:
-    - {fileID: 741449812}
-    - {fileID: 2128888851}
+    CharacterWheelTransformsAccelerated:
     - {fileID: 1057897217}
     - {fileID: 1158153964}
-    CharacterWheelTransformsRotatedStraight: []
+    CharacterWheelTransformsRotatedStraight:
+    - {fileID: 741449812}
+    - {fileID: 2128888851}
     CharacterWheelTransformsRotatedBackwards: []
   _movementData: {fileID: 11400000, guid: f63f8205f42354a448fbcd359c78c4fc, type: 2}
 --- !u!1 &1996118875

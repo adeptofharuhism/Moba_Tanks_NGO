@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.CodeBase.Character.Movement
 {
-    [CreateAssetMenu(fileName = "CharacterMovementData",menuName ="Character SO")]
+    [CreateAssetMenu(fileName = "CharacterMovementData",menuName ="Character SO/CharacterMovementData")]
     public class CharacterMovementData : ScriptableObject
     {
         [SerializeField] private LayerMask _carCollisionLayerMask;
@@ -18,6 +18,7 @@ namespace Assets.CodeBase.Character.Movement
         [SerializeField] private AnimationCurve _rearWheelSteeringTraction;
 
         [SerializeField] private float _maxSpeed;
+        [SerializeField] private float _maxSpeedBackward;
         [SerializeField] private AnimationCurve _enginePower;
 
         public LayerMask CarCollisionLayerMask => _carCollisionLayerMask;
@@ -32,6 +33,7 @@ namespace Assets.CodeBase.Character.Movement
         public AnimationCurve RearWheelSteeringTraction => _rearWheelSteeringTraction;
 
         public float MaxSpeed => _maxSpeed;
+        public float MaxSpeedBackwards => _maxSpeedBackward;
         public AnimationCurve EnginePower => _enginePower;
     }
 }
