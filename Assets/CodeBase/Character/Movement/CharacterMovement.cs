@@ -9,8 +9,6 @@ namespace Assets.CodeBase.Character.Movement
     [Serializable]
     public class CharacterMovement : IUpdatable
     {
-        private const AnimationCurve STEERING_TRACTION = null;
-
         private readonly IInputService _inputService;
         private readonly Transform _characterTransform;
 
@@ -24,13 +22,13 @@ namespace Assets.CodeBase.Character.Movement
 
         public CharacterMovement(
             IInputService inputService,
-            Transform characterTransform, Rigidbody characterRigidBody, CharacterWheelTransforms wheelTransforms,
+            Transform characterTransform, Rigidbody characterRigidBody, CharacterWheelGroups wheelGroups,
             CharacterMovementData movementData) {
 
             _inputService = inputService;
             _characterTransform = characterTransform;
 
-            CreateAllWheelArrays(characterRigidBody, wheelTransforms, movementData);
+            CreateAllWheelArrays(characterRigidBody, wheelGroups, movementData);
         }
 
         public void HandleInput() {
@@ -78,7 +76,7 @@ namespace Assets.CodeBase.Character.Movement
                 wheel.SetWheelRotation(wheelRotationInput);
         }
 
-        private void CreateAllWheelArrays(Rigidbody characterRigidBody, CharacterWheelTransforms wheelTransforms, CharacterMovementData movementData) {
+        private void CreateAllWheelArrays(Rigidbody characterRigidBody, CharacterWheelGroups wheelTransforms, CharacterMovementData movementData) {
             _characterWheelsAccelerated = CreateWheelArray(
                             wheelTransforms.CharacterWheelTransformsAccelerated, characterRigidBody, movementData);
             _characterWheelsRotatedStraight = CreateWheelArray(
@@ -87,13 +85,15 @@ namespace Assets.CodeBase.Character.Movement
                             wheelTransforms.CharacterWheelTransformsRotatedBackwards, characterRigidBody, movementData);
         }
 
-        private CharacterWheel[] CreateWheelArray(List<Transform> wheelTransforms, Rigidbody characterRigidbody, CharacterMovementData movementData) {
+        private CharacterWheel[] CreateWheelArray(
+            List<CharacterWheelProfile> wheelTransforms, Rigidbody characterRigidbody, CharacterMovementData movementData) {
+
             CharacterWheel[] wheels = new CharacterWheel[wheelTransforms.Count];
 
             for (int i = 0; i < wheelTransforms.Count; i++) {
                 wheels[i] =
                     new CharacterWheel(
-                        wheelTransforms[i],
+                        wheelTransforms[i].WheelTransform,
                         movementData.CarCollisionLayerMask,
                         characterRigidbody,
                         movementData.MaxWheelRotationDegrees,
@@ -101,7 +101,7 @@ namespace Assets.CodeBase.Character.Movement
                         movementData.WheelSpringStrength,
                         movementData.WheelSpringDamper,
                         movementData.WheelDiameter,
-                        STEERING_TRACTION,
+                        wheelTransforms[i].WheelTractionProfile.TractionProfile,
                         movementData.MaxSpeed,
                         movementData.MaxSpeedBackwards,
                         movementData.EnginePower);
@@ -120,8 +120,8 @@ namespace Assets.CodeBase.Character.Movement
     public class CharacterWheel
     {
         private const float EPSILON = 1E-06f;
-        private const float TRACTION_COEFFICIENT = .85f;
-        private const float BRAKING_COEFFICIENT = .02f;
+        private const float BRAKING_COEFFICIENT = .14f;
+        private const float HARD_BRAKING_COEFFICIENT = .42f;
 
         private readonly Transform _wheelTransform;
         private readonly LayerMask _characterCollisionLayerMask;
@@ -146,6 +146,7 @@ namespace Assets.CodeBase.Character.Movement
         private Vector3 _steeringAxis;
         private Vector3 _accelerationAxis;
         private Vector3 _wheelVelocityInWorld;
+        private float _currentVelocityZ;
 
         public CharacterWheel(
             Transform wheelTransform, LayerMask characterCollisionLayerMask,
@@ -188,8 +189,8 @@ namespace Assets.CodeBase.Character.Movement
                 return;
             }
 
-            Vector3 summaryPassiveForce = 
-                CalculateSpringAxisForce(_groundRaycastHit) + 
+            Vector3 summaryPassiveForce =
+                CalculateSpringAxisForce(_groundRaycastHit) +
                 CalculateSteeringAxisForce();
 
             _characterRigidbody.AddForceAtPosition(summaryPassiveForce, _wheelTransform.position);
@@ -235,14 +236,21 @@ namespace Assets.CodeBase.Character.Movement
         }
 
         private Vector3 CalculateSteeringAxisForce() {
-            float velocity = Vector3.Dot(_steeringAxis, _wheelVelocityInWorld);
-            float force = velocity * TRACTION_COEFFICIENT / Time.fixedDeltaTime;
+            float velocityX = Vector3.Dot(_steeringAxis, _wheelVelocityInWorld);
+            _currentVelocityZ = Vector3.Dot(_accelerationAxis, _wheelVelocityInWorld);
 
-            return -_steeringAxis * force;
+            Vector3 worldSpaceHorizontalSpeed = new Vector3(velocityX, 0, _currentVelocityZ);
+            Vector3 localSpaceHorizontalSpeed = _wheelTransform.rotation * worldSpaceHorizontalSpeed;
+
+            float tractionCoefficient = _steeringTraction.Evaluate(velocityX / (Mathf.Abs(localSpaceHorizontalSpeed.magnitude) + EPSILON));
+
+            float forceX = velocityX * tractionCoefficient / Time.fixedDeltaTime;
+
+            return -_steeringAxis * forceX;
         }
 
         private Vector3 CalculateAccelerationAxisForce(float wheelAccelerationInput) {
-            float velocityZ = Vector3.Dot(_accelerationAxis, _wheelVelocityInWorld);
+            float velocityZ = _currentVelocityZ;
             float normalizedVelocityZ;
             float forceZ;
 
@@ -255,7 +263,7 @@ namespace Assets.CodeBase.Character.Movement
                     forceZ = _enginePower.Evaluate(normalizedVelocityZ) * wheelAccelerationInput;
                 } else {
                     forceZ = _enginePower.Evaluate(0) * wheelAccelerationInput;
-                    forceZ = forceZ - velocityZ * BRAKING_COEFFICIENT;
+                    forceZ = forceZ - velocityZ * HARD_BRAKING_COEFFICIENT;
                 }
             } else if (wheelAccelerationInput < -EPSILON) {
                 if (velocityZ < _maxSpeedBackwards)
@@ -266,7 +274,7 @@ namespace Assets.CodeBase.Character.Movement
                     forceZ = _enginePower.Evaluate(normalizedVelocityZ) * wheelAccelerationInput;
                 } else {
                     forceZ = _enginePower.Evaluate(0) * wheelAccelerationInput;
-                    forceZ = forceZ - velocityZ * BRAKING_COEFFICIENT;
+                    forceZ = forceZ - velocityZ * HARD_BRAKING_COEFFICIENT;
                 }
             } else
                 forceZ = -velocityZ * BRAKING_COEFFICIENT;

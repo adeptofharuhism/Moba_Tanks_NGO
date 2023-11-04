@@ -15,61 +15,13 @@ MonoBehaviour:
   _carCollisionLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  _maxWheelRotationDegrees: 45
-  _wheelRestDistance: 1
-  _wheelSpringStrength: 100
-  _wheelSpringDamper: 15
+  _maxWheelRotationDegrees: 30
+  _wheelRestDistance: 2
+  _wheelSpringStrength: 70
+  _wheelSpringDamper: 12
   _wheelDiameter: 0.54
-  _frontWheelSteeringTraction:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.8
-      inSlope: 0.09620014
-      outSlope: 0.09620014
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.10547157
-    - serializedVersion: 3
-      time: 1
-      value: 0.1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _rearWheelSteeringTraction:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.56
-      inSlope: -0.5585633
-      outSlope: -0.5585633
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.06625578
-    - serializedVersion: 3
-      time: 1
-      value: 0.1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _maxSpeed: 12
-  _maxSpeedBackward: -6
+  _maxSpeed: 20
+  _maxSpeedBackward: -7
   _enginePower:
     serializedVersion: 2
     m_Curve:

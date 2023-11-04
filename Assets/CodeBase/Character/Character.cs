@@ -12,7 +12,7 @@ namespace Assets.CodeBase.Character
         //[SerializeField] private CharacterMovementData _movementData;
 
         [SerializeField] private Rigidbody _characterRigidBody;
-        [SerializeField] private CharacterWheelTransforms _wheelTransforms;
+        [SerializeField] private CharacterWheelGroups _wheelTransforms;
         [SerializeField] private CharacterMovementData _movementData;
 
         private CharacterMovement _movement;
@@ -44,10 +44,17 @@ namespace Assets.CodeBase.Character
     }
 
     [Serializable]
-    public class CharacterWheelTransforms
+    public class CharacterWheelGroups
     {
-        public List<Transform> CharacterWheelTransformsAccelerated;
-        public List<Transform> CharacterWheelTransformsRotatedStraight;
-        public List<Transform> CharacterWheelTransformsRotatedBackwards;
+        public List<CharacterWheelProfile> CharacterWheelTransformsAccelerated;
+        public List<CharacterWheelProfile> CharacterWheelTransformsRotatedStraight;
+        public List<CharacterWheelProfile> CharacterWheelTransformsRotatedBackwards;
+    }
+
+    [Serializable]
+    public class CharacterWheelProfile
+    {
+        public Transform WheelTransform;
+        public CharacterWheelTractionProfile WheelTractionProfile;
     }
 }

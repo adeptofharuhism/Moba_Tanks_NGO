@@ -7,15 +7,12 @@ namespace Assets.CodeBase.Character.Movement
     public class CharacterMovementData : ScriptableObject
     {
         [SerializeField] private LayerMask _carCollisionLayerMask;
-
+        
         [SerializeField] private float _maxWheelRotationDegrees = 45f;
         [SerializeField] private float _wheelRestDistance = .75f;
         [SerializeField] private float _wheelSpringStrength = 85f;
         [SerializeField] private float _wheelSpringDamper = 12f;
         [SerializeField] private float _wheelDiameter = .54f;
-
-        [SerializeField] private AnimationCurve _frontWheelSteeringTraction;
-        [SerializeField] private AnimationCurve _rearWheelSteeringTraction;
 
         [SerializeField] private float _maxSpeed;
         [SerializeField] private float _maxSpeedBackward;
@@ -28,9 +25,6 @@ namespace Assets.CodeBase.Character.Movement
         public float WheelSpringStrength => _wheelSpringStrength;
         public float WheelSpringDamper => _wheelSpringDamper;
         public float WheelDiameter => _wheelDiameter;
-
-        public AnimationCurve FrontWheelSteeringTraction => _frontWheelSteeringTraction;
-        public AnimationCurve RearWheelSteeringTraction => _rearWheelSteeringTraction;
 
         public float MaxSpeed => _maxSpeed;
         public float MaxSpeedBackwards => _maxSpeedBackward;
