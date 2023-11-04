@@ -15,33 +15,33 @@ MonoBehaviour:
   _carCollisionLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  _maxWheelRotationDegrees: 30
-  _wheelRestDistance: 2
-  _wheelSpringStrength: 70
+  _maxWheelRotationDegrees: 14
+  _wheelRestDistance: 1.5
+  _wheelSpringStrength: 45
   _wheelSpringDamper: 12
   _wheelDiameter: 0.54
-  _maxSpeed: 20
-  _maxSpeedBackward: -7
+  _maxSpeed: 14
+  _maxSpeedBackward: -6
   _enginePower:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.7
-      inSlope: 0.95921373
-      outSlope: 0.95921373
+      value: 0.5
+      inSlope: 0.06957564
+      outSlope: 0.06957564
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.27734977
+      outWeight: 0.27118644
     - serializedVersion: 3
       time: 0.25
       value: 1
-      inSlope: 0.044854622
+      inSlope: 0.579658
       outSlope: 0
       tangentMode: 65
       weightedMode: 0
-      inWeight: 0.42064714
+      inWeight: 0.2604006
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.6
@@ -64,3 +64,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _brakingCoefficient: 0.06
+  _hardBrakingCoefficient: 0.42

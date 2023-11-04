@@ -7,7 +7,7 @@ namespace Assets.CodeBase.Infrastructure.Utility
         [SerializeField] private GameBootstrapper _bootstrapperPrefab;
 
         private void Awake() {
-            GameBootstrapper bootstrapper = FindObjectOfType<GameBootstrapper>();
+            GameBootstrapper bootstrapper = FindFirstObjectByType<GameBootstrapper>();
 
             if (bootstrapper == null)
                 Instantiate(_bootstrapperPrefab);

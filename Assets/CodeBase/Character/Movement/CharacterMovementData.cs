@@ -17,6 +17,8 @@ namespace Assets.CodeBase.Character.Movement
         [SerializeField] private float _maxSpeed;
         [SerializeField] private float _maxSpeedBackward;
         [SerializeField] private AnimationCurve _enginePower;
+        [SerializeField] private float _brakingCoefficient;
+        [SerializeField] private float _hardBrakingCoefficient;
 
         public LayerMask CarCollisionLayerMask => _carCollisionLayerMask;
 
@@ -29,5 +31,7 @@ namespace Assets.CodeBase.Character.Movement
         public float MaxSpeed => _maxSpeed;
         public float MaxSpeedBackwards => _maxSpeedBackward;
         public AnimationCurve EnginePower => _enginePower;
+        public float BrakingCoefficient => _brakingCoefficient;
+        public float HardBrakingCoefficient => _hardBrakingCoefficient;
     }
 }

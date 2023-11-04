@@ -9,16 +9,14 @@ namespace Assets.CodeBase.Character
 {
     public class Character : MonoBehaviour
     {
-        //[SerializeField] private CharacterMovementData _movementData;
-
         [SerializeField] private Rigidbody _characterRigidBody;
-        [SerializeField] private CharacterWheelGroups _wheelTransforms;
         [SerializeField] private CharacterMovementData _movementData;
+        [SerializeField] private List<CharacterWheelProfile> _wheelProfiles;
 
         private CharacterMovement _movement;
-        
+
         public void Construct(IInputService inputService) {
-            _movement = new CharacterMovement(inputService, transform, _characterRigidBody, _wheelTransforms, _movementData);
+            _movement = new CharacterMovement(inputService, _characterRigidBody, _movementData, _wheelProfiles);
         }
 
         private void Awake() {
@@ -30,7 +28,7 @@ namespace Assets.CodeBase.Character
         }
 
         private void FixedUpdate() {
-            FixedUpdateMovement();    
+            FixedUpdateMovement();
         }
 
         private void UpdateMovement() {
@@ -44,17 +42,19 @@ namespace Assets.CodeBase.Character
     }
 
     [Serializable]
-    public class CharacterWheelGroups
-    {
-        public List<CharacterWheelProfile> CharacterWheelTransformsAccelerated;
-        public List<CharacterWheelProfile> CharacterWheelTransformsRotatedStraight;
-        public List<CharacterWheelProfile> CharacterWheelTransformsRotatedBackwards;
-    }
-
-    [Serializable]
     public class CharacterWheelProfile
     {
         public Transform WheelTransform;
         public CharacterWheelTractionProfile WheelTractionProfile;
+        public bool IsAccelerated;
+        public RotationType RotationType;
+        public Transform WheelModelTransform;
+    }
+
+    public enum RotationType
+    {
+        Static,
+        Straight,
+        Backward
     }
 }
