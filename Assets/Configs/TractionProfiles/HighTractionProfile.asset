@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b330402a55545964ca0eb321cd8febc4, type: 3}
-  m_Name: RearTractionProfile
+  m_Name: HighTractionProfile
   m_EditorClassIdentifier: 
   _tractionProfile:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.26
-      inSlope: -0.07888002
-      outSlope: -0.07888002
+      value: 1
+      inSlope: -5.6516676
+      outSlope: -5.6516676
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.8183169
+      outWeight: 0.10015409
     - serializedVersion: 3
-      time: 0.3
-      value: 0.2
-      inSlope: -0.29903772
-      outSlope: -0.29903772
+      time: 0.2
+      value: 0.4
+      inSlope: -0.9733003
+      outSlope: -0.9733003
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.09971385
+      inWeight: 0.28351313
+      outWeight: 0.06889718
     - serializedVersion: 3
       time: 1
       value: 0.1

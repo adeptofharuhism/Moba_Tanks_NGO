@@ -1,7 +1,6 @@
 ﻿using Assets.CodeBase.Character.Movement;
 using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.Input;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,22 +38,5 @@ namespace Assets.CodeBase.Character
         private void FixedUpdateMovement() {
             _movement.FixedUpdate();
         }
-    }
-
-    [Serializable]
-    public class CharacterWheelProfile
-    {
-        public Transform WheelTransform;
-        public CharacterWheelTractionProfile WheelTractionProfile;
-        public bool IsAccelerated;
-        public RotationType RotationType;
-        public Transform WheelModelTransform;
-    }
-
-    public enum RotationType
-    {
-        Static,
-        Straight,
-        Backward
     }
 }

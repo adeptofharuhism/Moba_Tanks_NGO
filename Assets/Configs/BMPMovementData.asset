@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bf71b1562104fd4097e5774951e88b4, type: 3}
-  m_Name: CharacterMovementData
+  m_Name: BMPMovementData
   m_EditorClassIdentifier: 
   _carCollisionLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  _maxWheelRotationDegrees: 14
+  _maxWheelRotationDegrees: 22
   _wheelRestDistance: 1.5
   _wheelSpringStrength: 45
   _wheelSpringDamper: 12
@@ -64,5 +64,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _brakingCoefficient: 0.06
+  _brakingForce: 1
   _hardBrakingCoefficient: 0.42

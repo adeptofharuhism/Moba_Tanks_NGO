@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b330402a55545964ca0eb321cd8febc4, type: 3}
-  m_Name: FrontTractionProfile
+  m_Name: LowTractionProfile
   m_EditorClassIdentifier: 
   _tractionProfile:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.7
-      inSlope: -0.019802064
-      outSlope: -0.019802064
+      value: 0.52
+      inSlope: -3.6154196
+      outSlope: -3.6154196
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.59425354
+      outWeight: 0.3081664
     - serializedVersion: 3
-      time: 0.3
-      value: 0.4
-      inSlope: -1.1736706
-      outSlope: -1.1736706
+      time: 0.2
+      value: 0.2
+      inSlope: -0.29903772
+      outSlope: -0.29903772
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.085773066
-      outWeight: 0.06889718
+      inWeight: 0.33333334
+      outWeight: 0.09971385
     - serializedVersion: 3
       time: 1
       value: 0.1
