@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3360205566435929208
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a1f5d32cdbe4bd4395e15ec974df19b, type: 3}
+  m_Name: MoebiusPostProcessing
+  m_EditorClassIdentifier: 
+  active: 1
+  borderColor:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 1, b: 0.018793583, a: 1}
+    hdr: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,4 +29,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
   m_Name: PostProcessingVolume Profile
   m_EditorClassIdentifier: 
-  components: []
+  components:
+  - {fileID: -3360205566435929208}

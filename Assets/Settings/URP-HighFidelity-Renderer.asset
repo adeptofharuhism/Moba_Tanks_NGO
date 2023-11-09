@@ -68,7 +68,8 @@ MonoBehaviour:
       type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  m_RendererFeatureMap: adc0de57c6d2eee5
+  - {fileID: 6886663139692411460}
+  m_RendererFeatureMap: adc0de57c6d2eee5447a2471a357925f
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -113,3 +114,20 @@ MonoBehaviour:
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &6886663139692411460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119561f8f7a0bf941b68d7cfaf2bf10e, type: 3}
+  m_Name: MoebiusPostProcessRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  _depthShader: {fileID: -6465566751694194690, guid: f52fdc790612b05498a71dbb0df3e0af,
+    type: 3}
+  _sobelShader: {fileID: -6465566751694194690, guid: 60c2843b272efa6468993266c96bd680,
+    type: 3}
