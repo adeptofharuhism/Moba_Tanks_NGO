@@ -129,5 +129,11 @@ MonoBehaviour:
   m_Active: 1
   _depthShader: {fileID: -6465566751694194690, guid: f52fdc790612b05498a71dbb0df3e0af,
     type: 3}
+  _normaleShader: {fileID: -6465566751694194690, guid: f5b420b956ca24f49be9fd0fedfedef5,
+    type: 3}
   _sobelShader: {fileID: -6465566751694194690, guid: 60c2843b272efa6468993266c96bd680,
+    type: 3}
+  _sobelShaderBLYAT: {fileID: -6465566751694194690, guid: 72c2943ca18af1a40a1fd95188dc481f,
+    type: 3}
+  _compositeShader: {fileID: -6465566751694194690, guid: eaf6e1abc4afcd44fa52e17affa6fa17,
     type: 3}
