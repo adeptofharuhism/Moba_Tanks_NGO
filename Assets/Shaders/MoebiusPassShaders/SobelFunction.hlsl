@@ -4,7 +4,7 @@
 void SobelFunction_float(
 	Texture2D sobelInputTexture, SamplerState samplerState, float2 uv,
 	float4 sobelColor, float borderIntensity, float sobelThreshold, float colorIntensity,
-	out float3 Out) {
+	out float Out) {
 
 	static const int _middleTexel = 4;
 
@@ -54,10 +54,7 @@ void SobelFunction_float(
 	color = (color > sobelThreshold) ? color : 0;
 	color *= colorIntensity;
 
-	//float3 outlineColor = lerp(textureSamples[_middleTexel], sobelColor, color);
-	float3 outlineColor = sobelColor * color;
-
-	Out = outlineColor;
+	Out = color;
 }
 
 #endif
