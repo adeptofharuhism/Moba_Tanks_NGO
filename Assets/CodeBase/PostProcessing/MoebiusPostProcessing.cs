@@ -15,7 +15,6 @@ namespace Assets.CodeBase.PostProcessing
         public ClampedFloatParameter SobelThresholdForNormale = new ClampedFloatParameter(0.1f, 0, 1f, true);
         public FloatParameter ColorIntensityForNormale = new FloatParameter(1f, true);
 
-
         public bool IsActive() {
             return true;
         }

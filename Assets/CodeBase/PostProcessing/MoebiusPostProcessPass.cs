@@ -11,11 +11,9 @@ namespace Assets.CodeBase.PostProcessing
         private const string _normalePassName = "_NormalePass";
         private const string _sobelDepthPassName = "_SobelDepthPass";
         private const string _sobelNormalePassName = "_SobelNormalePass";
-        private const string _compositePassName = "_SobelCompositePass";
 
         private static int _sobelDepthPassId = Shader.PropertyToID(_sobelDepthPassName);
         private static int _sobelNormalePassId = Shader.PropertyToID(_sobelNormalePassName);
-        private static int _compositePassId = Shader.PropertyToID(_compositePassName);
 
         private static int _sobelColorPropertyId = Shader.PropertyToID("_SobelColor");
         private static int _borderIntensityPropertyId = Shader.PropertyToID("_BorderIntensity");
@@ -35,7 +33,6 @@ namespace Assets.CodeBase.PostProcessing
         private RTHandle _normaleTarget;
         private RTHandle _sobelDepthTarget;
         private RTHandle _sobelNormaleTarget;
-        private RTHandle _compositeTarget;
         private RenderTextureDescriptor _descriptor;
 
         private MoebiusPostProcessing _moebiusEffect;
@@ -54,7 +51,6 @@ namespace Assets.CodeBase.PostProcessing
             _normaleTarget = RTHandles.Alloc(Shader.PropertyToID(_normalePassName), name: _normalePassName);
             _sobelDepthTarget = RTHandles.Alloc(_sobelDepthPassId, name: _sobelDepthPassName);
             _sobelNormaleTarget = RTHandles.Alloc(_sobelNormalePassId, name: _sobelNormalePassName);
-            _compositeTarget = RTHandles.Alloc(_compositePassId, name: _compositePassName);
 
             renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
 
