@@ -15,7 +15,6 @@ namespace Assets.CodeBase.PostProcessing
         private static int _sobelDepthPassId = Shader.PropertyToID(_sobelDepthPassName);
         private static int _sobelNormalePassId = Shader.PropertyToID(_sobelNormalePassName);
 
-        private static int _sobelColorPropertyId = Shader.PropertyToID("_SobelColor");
         private static int _borderIntensityPropertyId = Shader.PropertyToID("_BorderIntensity");
         private static int _sobelThresholdPropertyId = Shader.PropertyToID("_SobelThreshold");
         private static int _colorIntensityPropertyId = Shader.PropertyToID("_ColorIntensity");
@@ -28,6 +27,7 @@ namespace Assets.CodeBase.PostProcessing
         private readonly Material _sobelDepthMaterial;
         private readonly Material _compositeMaterial;
         private readonly Material _sobeNormalelMaterial;
+
         private RTHandle _cameraColorTarget;
         private RTHandle _depthTarget;
         private RTHandle _normaleTarget;
@@ -38,9 +38,11 @@ namespace Assets.CodeBase.PostProcessing
         private MoebiusPostProcessing _moebiusEffect;
         private GraphicsFormat _hdrFormat;
 
+        private float _interpolationCoefficientForParameters;
+
         public MoebiusPostProcessPass
-            (Material depthMaterial, Material sobelDepthMaterial, Material sobelNormaleMaterial, Material normaleMaterial, Material compositeMaterial ) {
-            
+            (Material depthMaterial, Material sobelDepthMaterial, Material sobelNormaleMaterial, Material normaleMaterial, Material compositeMaterial) {
+
             _depthMaterial = depthMaterial;
             _sobelDepthMaterial = sobelDepthMaterial;
             _normaleMaterial = normaleMaterial;
@@ -70,13 +72,13 @@ namespace Assets.CodeBase.PostProcessing
             _descriptor = renderingData.cameraData.cameraTargetDescriptor;
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) {
-            if (_cameraColorTarget == null) {
-                Debug.Log("Returned");
+            if (_cameraColorTarget == null)
                 return;
-            }
 
             VolumeStack stack = VolumeManager.instance.stack;
             _moebiusEffect = stack.GetComponent<MoebiusPostProcessing>();
+
+            CalculateInterpolationCoefficient();
 
             CommandBuffer cmd = CommandBufferPool.Get();
 
@@ -87,10 +89,10 @@ namespace Assets.CodeBase.PostProcessing
                     ref _depthTarget, descriptor, FilterMode.Bilinear, TextureWrapMode.Mirror, name: _depthTarget.name);
                 Blitter.BlitCameraTexture(cmd, _depthTarget, _depthTarget, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, _depthMaterial, 0);
 
-                _sobelDepthMaterial.SetColor(_sobelColorPropertyId, _moebiusEffect.BorderColor.value);
                 _sobelDepthMaterial.SetFloat(_borderIntensityPropertyId, _moebiusEffect.BorderIntensity.value);
                 _sobelDepthMaterial.SetFloat(_sobelThresholdPropertyId, _moebiusEffect.SobelThresholdForDepth.value);
-                _sobelDepthMaterial.SetFloat(_colorIntensityPropertyId, _moebiusEffect.ColorIntensityForDepth.value);
+                _sobelDepthMaterial.SetFloat(
+                    _colorIntensityPropertyId, InterpolateFloatParameter(_moebiusEffect.ColorIntensityForDepth.value));
                 _sobelDepthMaterial.SetTexture(_sobelTexPropertyId, _depthTarget);
 
                 RenderingUtils.ReAllocateIfNeeded(
@@ -101,11 +103,11 @@ namespace Assets.CodeBase.PostProcessing
                     ref _normaleTarget, descriptor, FilterMode.Bilinear, TextureWrapMode.Mirror, name: _normaleTarget.name);
                 Blitter.BlitCameraTexture(cmd, _normaleTarget, _normaleTarget, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, _normaleMaterial, 0);
 
-                _sobeNormalelMaterial.SetColor(_sobelColorPropertyId, _moebiusEffect.BorderColor.value);
                 _sobeNormalelMaterial.SetFloat(_borderIntensityPropertyId, _moebiusEffect.BorderIntensity.value);
                 _sobeNormalelMaterial.SetFloat(_sobelThresholdPropertyId, _moebiusEffect.SobelThresholdForNormale.value);
-                _sobeNormalelMaterial.SetFloat(_colorIntensityPropertyId, _moebiusEffect.ColorIntensityForNormale.value);
-                _sobeNormalelMaterial.SetTexture(Shader.PropertyToID("_SobelTex"), _normaleTarget);
+                _sobeNormalelMaterial.SetFloat(
+                    _colorIntensityPropertyId, InterpolateFloatParameter(_moebiusEffect.ColorIntensityForNormale.value));
+                _sobeNormalelMaterial.SetTexture(_sobelTexPropertyId, _normaleTarget);
 
                 RenderingUtils.ReAllocateIfNeeded(
                     ref _sobelNormaleTarget, descriptor, FilterMode.Bilinear, TextureWrapMode.Mirror, name: _sobelNormaleTarget.name);
@@ -122,6 +124,16 @@ namespace Assets.CodeBase.PostProcessing
 
             CommandBufferPool.Release(cmd);
         }
+
+        private void CalculateInterpolationCoefficient() {
+            int currentResolution = (_descriptor.width > _descriptor.height) ? _descriptor.width : _descriptor.height;
+            _interpolationCoefficientForParameters =
+                (currentResolution - _moebiusEffect.MinimalResolution.value) /
+                (_moebiusEffect.TargetResolution.value - _moebiusEffect.MinimalResolution.value);
+        }
+
+        private float InterpolateFloatParameter(float parameter) =>
+            parameter + parameter * _interpolationCoefficientForParameters;
 
         private RenderTextureDescriptor GetCompatibleDescriptor(
             int width, int height, DepthBits depthBufferBits = DepthBits.None) =>

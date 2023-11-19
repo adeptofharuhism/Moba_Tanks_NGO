@@ -4,6 +4,9 @@
     "m_ObjectId": "bdb97332ac344ce6b5e002aafdec5e10",
     "m_Properties": [
         {
+            "m_Id": "7c8279c41252494e9c5f78dd97ae8254"
+        },
+        {
             "m_Id": "9f387a82ee3e4a46b8f26932f0c2d015"
         },
         {
@@ -80,6 +83,9 @@
         },
         {
             "m_Id": "ff3c44abcea447ab9f1ec488c707b2a3"
+        },
+        {
+            "m_Id": "780b669508064c16b3f719342df381b1"
         }
     ],
     "m_GroupDatas": [],
@@ -167,6 +173,20 @@
                     "m_Id": "ade650945702489486ee95a033c9bb58"
                 },
                 "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "780b669508064c16b3f719342df381b1"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "278349e5e49c492e815bfeaa07f62fb6"
+                },
+                "m_SlotId": 1714932138
             }
         },
         {
@@ -648,13 +668,16 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1484.0001220703125,
-            "y": 482.0000305175781,
-            "width": 208.0,
-            "height": 278.0000305175781
+            "x": -1556.0,
+            "y": 427.0,
+            "width": 350.0,
+            "height": 278.00006103515627
         }
     },
     "m_Slots": [
+        {
+            "m_Id": "3e76f500bff247d9bdf7ec7c8cec4a31"
+        },
         {
             "m_Id": "6ee7926bc6034306b858f824d1cae96d"
         }
@@ -668,8 +691,14 @@
         "m_SerializableColors": []
     },
     "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"84ba07dac48ad40458642d445aa6a491\",\n        \"type\": 3\n    }\n}",
-    "m_PropertyGuids": [],
-    "m_PropertyIds": [],
+    "m_PropertyGuids": [
+        "295f5d74-2838-440c-bf7f-522a722c18c7",
+        "85fc2c32-c643-4aa8-9d7b-e3f54658805c"
+    ],
+    "m_PropertyIds": [
+        -2145835391,
+        1714932138
+    ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
 }
@@ -723,9 +752,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1340.0,
-            "y": 1298.0,
-            "width": 129.0,
+            "x": -2066.999755859375,
+            "y": 1448.0,
+            "width": 128.9998779296875,
             "height": 33.9998779296875
         }
     },
@@ -858,10 +887,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -661.9999389648438,
-            "y": 1426.9998779296875,
-            "width": 207.99990844726563,
-            "height": 302.0
+            "x": -1389.0,
+            "y": 1573.0,
+            "width": 208.0001220703125,
+            "height": 301.9998779296875
         }
     },
     "m_Slots": [
@@ -887,6 +916,27 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "3e76f500bff247d9bdf7ec7c8cec4a31",
+    "m_Id": 1714932138,
+    "m_DisplayName": "CrossHatchTiling",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_CrossHatchTiling",
+    "m_StageCapability": 2,
+    "m_Value": {
+        "x": 1.0,
+        "y": 1.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -1075,10 +1125,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -952.9999389648438,
-            "y": 1426.9998779296875,
-            "width": 207.99993896484376,
-            "height": 278.0
+            "x": -1680.0,
+            "y": 1573.0,
+            "width": 208.0,
+            "height": 277.9998779296875
         }
     },
     "m_Slots": [
@@ -1577,6 +1627,42 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "780b669508064c16b3f719342df381b1",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": -1823.7274169921875,
+            "y": 493.2925109863281,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "ce6fc2b7c35f47188ad5139b02a5ab55"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "7c8279c41252494e9c5f78dd97ae8254"
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "798bd23225ff409fbf97ed5d457dc7e6",
     "m_Group": {
@@ -1649,6 +1735,34 @@
     "m_PreviewMode": 0,
     "m_CustomColors": {
         "m_SerializableColors": []
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
+    "m_ObjectId": "7c8279c41252494e9c5f78dd97ae8254",
+    "m_Guid": {
+        "m_GuidSerialized": "8f144c27-b33d-4cc7-843f-e511533b0c94"
+    },
+    "m_Name": "CrossHatchTiling",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "CrossHatchTiling",
+    "m_DefaultReferenceName": "_CrossHatchTiling",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 0.0,
+        "w": 0.0
     }
 }
 
@@ -1839,10 +1953,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1206.0,
-            "y": 1270.0,
+            "x": -1933.0,
+            "y": 1415.9998779296875,
             "width": 208.0,
-            "height": 434.9998779296875
+            "height": 435.0
         }
     },
     "m_Slots": [
@@ -2034,6 +2148,9 @@
         },
         {
             "m_Id": "41c02932ce6846d88f6da484b432f741"
+        },
+        {
+            "m_Id": "7c8279c41252494e9c5f78dd97ae8254"
         }
     ]
 }
@@ -2183,6 +2300,27 @@
         "z": 0.0,
         "w": 0.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "ce6fc2b7c35f47188ad5139b02a5ab55",
+    "m_Id": 0,
+    "m_DisplayName": "CrossHatchTiling",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -2613,9 +2751,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -434.0000305175781,
-            "y": 1331.9998779296875,
-            "width": 208.00003051757813,
+            "x": -1161.0,
+            "y": 1478.0,
+            "width": 208.0001220703125,
             "height": 302.0
         }
     },

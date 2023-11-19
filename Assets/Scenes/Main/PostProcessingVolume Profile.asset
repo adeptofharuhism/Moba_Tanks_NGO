@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: MoebiusPostProcessing
   m_EditorClassIdentifier: 
   active: 1
-  BorderColor:
+  MinimalResolution:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-    hdr: 0
+    m_Value: 600
+  TargetResolution:
+    m_OverrideState: 1
+    m_Value: 1920
+  ParameterScalingForTargetResolution:
+    m_OverrideState: 1
+    m_Value: 1
   BorderIntensity:
     m_OverrideState: 1
     m_Value: 1
@@ -25,25 +30,13 @@ MonoBehaviour:
     m_Value: 0.0008
   ColorIntensityForDepth:
     m_OverrideState: 1
-    m_Value: 500
+    m_Value: 250
   SobelThresholdForNormale:
     m_OverrideState: 1
     m_Value: 0.045
   ColorIntensityForNormale:
     m_OverrideState: 1
-    m_Value: 4.5
-  ShadowFirstStep:
-    m_OverrideState: 1
-    m_Value: 0.04
-  ShadowSecondStep:
-    m_OverrideState: 1
-    m_Value: 0.07
-  ShadowThirdStep:
-    m_OverrideState: 1
-    m_Value: 0.2
-  LightValueMultiplier:
-    m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2.5
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

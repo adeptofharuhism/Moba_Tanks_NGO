@@ -3,7 +3,7 @@
 
 void SobelFunction_float(
 	Texture2D sobelInputTexture, SamplerState samplerState, float2 uv,
-	float4 sobelColor, float borderIntensity, float sobelThreshold, float colorIntensity,
+	float borderIntensity, float sobelThreshold, float colorIntensity,
 	out float Out) {
 
 	static const int _middleTexel = 4;
