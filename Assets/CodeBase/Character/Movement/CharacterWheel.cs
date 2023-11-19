@@ -5,8 +5,8 @@ namespace Assets.CodeBase.Character.Movement
 {
     public class CharacterWheel
     {
-        private const float EPSILON = 1E-06f;
-        private const int HARD_BRAKING_ENGINE_POWER = 0;
+        public const float Epsilon = 1E-06f;
+        public const int HardBrakingEnginePower = 0;
 
         private readonly Transform _wheelTransform;
         private readonly Rigidbody _characterRigidbody;
@@ -123,7 +123,7 @@ namespace Assets.CodeBase.Character.Movement
             Vector3 worldSpaceHorizontalSpeed = new Vector3(velocityX, 0, _currentVelocityZ);
             Vector3 localSpaceHorizontalSpeed = _wheelTransform.rotation * worldSpaceHorizontalSpeed;
 
-            float tractionCoefficient = _steeringTraction.Evaluate(velocityX / (Mathf.Abs(localSpaceHorizontalSpeed.magnitude) + EPSILON));
+            float tractionCoefficient = _steeringTraction.Evaluate(velocityX / (Mathf.Abs(localSpaceHorizontalSpeed.magnitude) + Epsilon));
 
             float forceX = velocityX * tractionCoefficient / Time.fixedDeltaTime;
 
@@ -134,12 +134,12 @@ namespace Assets.CodeBase.Character.Movement
             float velocityZ = _currentVelocityZ;
             float forceZ;
 
-            if (wheelAccelerationInput > EPSILON) {
+            if (wheelAccelerationInput > Epsilon) {
                 if (velocityZ > _maxSpeed)
                     return Vector3.zero;
                 forceZ = CalculateForceZ(wheelAccelerationInput, velocityZ, _maxSpeed);
 
-            } else if (wheelAccelerationInput < -EPSILON) {
+            } else if (wheelAccelerationInput < -Epsilon) {
                 if (velocityZ < _maxSpeedBackwards)
                     return Vector3.zero;
                 forceZ = CalculateForceZ(wheelAccelerationInput, velocityZ, _maxSpeedBackwards);
@@ -160,7 +160,7 @@ namespace Assets.CodeBase.Character.Movement
                     NormalizeVelocityZ(velocityZ, maxSpeed));
             else
                 forceZ =
-                    CalculateEngineForce(wheelAccelerationInput, HARD_BRAKING_ENGINE_POWER) +
+                    CalculateEngineForce(wheelAccelerationInput, HardBrakingEnginePower) +
                     CalculateHardBraking(velocityZ);
 
             return forceZ;

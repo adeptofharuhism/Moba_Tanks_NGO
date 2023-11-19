@@ -19,9 +19,6 @@ MonoBehaviour:
   TargetResolution:
     m_OverrideState: 1
     m_Value: 1920
-  ParameterScalingForTargetResolution:
-    m_OverrideState: 1
-    m_Value: 1
   BorderIntensity:
     m_OverrideState: 1
     m_Value: 1

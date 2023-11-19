@@ -9,7 +9,6 @@ namespace Assets.CodeBase.PostProcessing
         [Header("Resolution scaling")]
         public IntParameter MinimalResolution = new(600, true);
         public IntParameter TargetResolution = new(1920, true);
-        public ClampedFloatParameter ParameterScalingForTargetResolution = new(1, 0, 3, true);
         [Header("Border")]
         public ClampedFloatParameter BorderIntensity = new(1, 0, 3, true);
         [Header("Depth Sobel")]
