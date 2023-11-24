@@ -2,6 +2,7 @@
 using Assets.CodeBase.Infrastructure.Services.Input;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Assets.CodeBase.Character.Movement
@@ -30,8 +31,14 @@ namespace Assets.CodeBase.Character.Movement
         }
 
         public void HandleInput() {
-            Vector2 movementInput = _inputService.MoveInputValue;
+            //HandleInputServerRpc(_inputService.MoveInputValue);
+        }
 
+        public Vector2 GetInput() => 
+            _inputService.MoveInputValue;
+
+
+        public void SetLol(Vector2 movementInput) {
             _wheelAccelerationInput = movementInput.y;
 
             _wheelRotationInput = movementInput.x;
@@ -46,6 +53,12 @@ namespace Assets.CodeBase.Character.Movement
             ApplyPassiveForceToWheels();
 
             ApplyAccelerationForceToWheelGroup();
+        }
+
+        private void HandleInputServerRpc(Vector2 movementInput) {
+            _wheelAccelerationInput = movementInput.y;
+
+            _wheelRotationInput = movementInput.x;
         }
 
         private void ApplyPassiveForceToWheels() {
