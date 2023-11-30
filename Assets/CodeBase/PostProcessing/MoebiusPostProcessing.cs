@@ -12,7 +12,7 @@ namespace Assets.CodeBase.PostProcessing
         [Header("Border")]
         public ClampedFloatParameter BorderIntensity = new(1, 0, 3, true);
         [Header("Depth Sobel")]
-        public ClampedFloatParameter SobelThresholdForDepth = new(0.0005f, 0, 0.002f, true);
+        public ClampedFloatParameter SobelThresholdForDepth = new(0.0005f, 0, 0.1f, true);
         public FloatParameter ColorIntensityForDepth = new(250f, true);
         [Header("Normale Sobel")]
         public ClampedFloatParameter SobelThresholdForNormale = new(0.1f, 0, 1f, true);

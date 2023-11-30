@@ -1,4 +1,6 @@
 ﻿using Assets.CodeBase.Infrastructure.Services;
+using Assets.CodeBase.Infrastructure.Services.Connection;
+using Assets.CodeBase.Infrastructure.Services.Connection.States;
 using Assets.CodeBase.Infrastructure.Services.Input;
 using Assets.CodeBase.Infrastructure.StateMachine;
 
@@ -22,17 +24,16 @@ namespace Assets.CodeBase.Infrastructure.GameStates
             _sceneLoader.Load(Constants.SceneNames.Initial, OnLoaded);
         }
 
-        public void Exit() {
-
-        }
+        public void Exit() { }
 
         private void OnLoaded() {
-            _stateMachine.Enter<LoadLevelState, string>(Constants.SceneNames.Main);
+            _stateMachine.Enter<LoadLevelState, string>(Constants.SceneNames.MainMenu);
         }
 
         private void RegisterServices() {
             _services.RegisterSingle<IStateMachine>(_stateMachine);
             _services.RegisterSingle(PrepareInputService());
+            _services.RegisterSingle(PrepareConnectionService());
         }
 
         private IInputService PrepareInputService() {
@@ -40,6 +41,13 @@ namespace Assets.CodeBase.Infrastructure.GameStates
             inputService.Initialize();
 
             return inputService;
+        }
+
+        private IConnectionService PrepareConnectionService() {
+            ConnectionService connService = new ConnectionService(_services.Single<IStateMachine>());
+            connService.Enter<OfflineState>();
+
+            return connService;
         }
     }
 }

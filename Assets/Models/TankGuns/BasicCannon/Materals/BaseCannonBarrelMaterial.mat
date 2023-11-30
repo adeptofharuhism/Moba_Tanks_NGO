@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BaseCannonBarrelMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: bff56bb0911d376468de1d4d45f6680f,
+  m_Shader: {fileID: -6465566751694194690, guid: 96930ea6205f89d428201f5c212d67c7,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -64,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_078c8127be10428091f22fdc454c990d_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 83b99968fece60441afdffdf89b21f8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -112,7 +116,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _CrossHatchTiling: {r: 2, g: 2, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 1, b: 0, a: 1}
+    - _MainColor: {r: 0, g: 2, b: 0.05228758, a: 1}
+    - _ShadedColor: {r: 0.5019608, g: 0.21960784, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _UnitColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
   m_BuildTextureStacks: []
