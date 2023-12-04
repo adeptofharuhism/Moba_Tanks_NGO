@@ -60,6 +60,7 @@ namespace Assets.CodeBase.Infrastructure.GameStates
                 _services.Single<IStateMachine>(),
                 _services.Single<INetworkService>());
 
+            connService.Initialize();
             connService.Enter<OfflineState>();
 
             return connService;
