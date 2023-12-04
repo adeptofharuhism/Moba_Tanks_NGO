@@ -2,7 +2,9 @@
 using Assets.CodeBase.Infrastructure.Services.Connection;
 using Assets.CodeBase.Infrastructure.Services.Connection.States;
 using Assets.CodeBase.Infrastructure.Services.Input;
+using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.StateMachine;
+using Unity.Netcode;
 
 namespace Assets.CodeBase.Infrastructure.GameStates
 {
@@ -10,11 +12,13 @@ namespace Assets.CodeBase.Infrastructure.GameStates
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
+        private readonly NetworkManager _networkManager;
         private readonly AllServices _services;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices services) {
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, NetworkManager networkManager, AllServices services) {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
+            _networkManager = networkManager;
             _services = services;
 
             RegisterServices();
@@ -33,6 +37,8 @@ namespace Assets.CodeBase.Infrastructure.GameStates
         private void RegisterServices() {
             _services.RegisterSingle<IStateMachine>(_stateMachine);
             _services.RegisterSingle(PrepareInputService());
+
+            _services.RegisterSingle(PrepareNetworkService());
             _services.RegisterSingle(PrepareConnectionService());
         }
 
@@ -43,8 +49,17 @@ namespace Assets.CodeBase.Infrastructure.GameStates
             return inputService;
         }
 
+        private INetworkService PrepareNetworkService() {
+            INetworkService networkService = new NetworkService(_networkManager);
+
+            return networkService;
+        }
+
         private IConnectionService PrepareConnectionService() {
-            ConnectionService connService = new ConnectionService(_services.Single<IStateMachine>());
+            ConnectionService connService = new ConnectionService(
+                _services.Single<IStateMachine>(),
+                _services.Single<INetworkService>());
+
             connService.Enter<OfflineState>();
 
             return connService;

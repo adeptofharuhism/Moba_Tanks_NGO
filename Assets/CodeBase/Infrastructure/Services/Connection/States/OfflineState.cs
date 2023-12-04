@@ -1,12 +1,20 @@
 ﻿using Assets.CodeBase.Infrastructure.GameStates;
+using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.StateMachine;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 {
     public abstract class ConnectionState : IConnectionState
     {
+        protected readonly IStateMachine _gameStateMachine;
+        protected readonly INetworkService _networkService;
+
+        public ConnectionState(IStateMachine gameStateMachine, INetworkService networkService) {
+            _gameStateMachine = gameStateMachine;
+            _networkService = networkService;
+        }
+
         public abstract void Enter();
 
         public abstract void Exit();
@@ -17,14 +25,11 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
     public class OfflineState : ConnectionState
     {
-        private readonly IStateMachine _gameStateMachine;
-
-        public OfflineState(IStateMachine gameStateMachine) {
-            _gameStateMachine = gameStateMachine;
-        }
+        public OfflineState(IStateMachine gameStateMachine, INetworkService networkService)
+            : base(gameStateMachine, networkService) { }
 
         public override void Enter() {
-
+            _networkService.NetworkManager.Shutdown();
 
             if (SceneManager.GetActiveScene().name != Constants.SceneNames.MainMenu)
                 _gameStateMachine.Enter<LoadLevelState, string>(Constants.SceneNames.MainMenu);
@@ -37,6 +42,9 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
     public class OnlineState : ConnectionState
     {
+        public OnlineState(IStateMachine gameStateMachine, INetworkService networkService)
+            : base(gameStateMachine, networkService) { }
+
         public override void Enter() {
             throw new System.NotImplementedException();
         }

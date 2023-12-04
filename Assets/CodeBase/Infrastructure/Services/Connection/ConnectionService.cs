@@ -1,4 +1,5 @@
 ﻿using Assets.CodeBase.Infrastructure.Services.Connection.States;
+using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.StateMachine;
 using System.Collections.Generic;
 
@@ -6,9 +7,9 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
 {
     public class ConnectionService : BaseStateMachine<IConnectionExitableState>, IConnectionService
     {
-        public ConnectionService(IStateMachine gameStateMachine) {
+        public ConnectionService(IStateMachine gameStateMachine, INetworkService networkService) {
             _states = new Dictionary<System.Type, IConnectionExitableState>() {
-                [typeof(OfflineState)] = new OfflineState(gameStateMachine)
+                [typeof(OfflineState)] = new OfflineState(gameStateMachine, networkService)
             };
         }
 
