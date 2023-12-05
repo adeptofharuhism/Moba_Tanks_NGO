@@ -11,25 +11,22 @@ namespace Assets.CodeBase.UI.MainMenu
         [SerializeField] private Button _startHostingButton;
         [SerializeField] private TMP_InputField _hostIPAddress;
         [SerializeField] private TMP_InputField _hostPort;
-        [SerializeField] private TMP_InputField _hostName;
+        [SerializeField] private TMP_InputField _playerName;
 
         private IConnectionService _connectionService;
 
-        private void Awake() {
+        private void Awake() => 
             _connectionService = AllServices.Container.Single<IConnectionService>();
-        }
 
         private void Start() {
             LobbyPanelInitialize();
             HostLobbyPanelInitialize();
         }
 
-        private void HostLobbyPanelInitialize() {
+        private void HostLobbyPanelInitialize() => 
             _startHostingButton.onClick.AddListener(StartHostingClick);
-        }
 
-        private void StartHostingClick() {
-            _connectionService.StartHostIP(_hostName.text, _hostIPAddress.text, int.Parse(_hostPort.text));
-        }
+        private void StartHostingClick() => 
+            _connectionService.StartHostIP(_playerName.text, _hostIPAddress.text, int.Parse(_hostPort.text));
     }
 }

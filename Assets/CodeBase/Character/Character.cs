@@ -21,7 +21,6 @@ namespace Assets.CodeBase.Character
         }
 
         private void Awake() {
-            Debug.Log("Pososi");
             Construct(AllServices.Container.Single<IInputService>());
         }
 

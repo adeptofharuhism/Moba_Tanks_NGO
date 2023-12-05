@@ -6,16 +6,24 @@ namespace Assets.CodeBase.Infrastructure.StateMachine
     public abstract class BaseStateMachine<TMachineType> : IStateMachine
         where TMachineType : class, IExitableState
     {
+        protected bool _ready = false;
+
         protected Dictionary<Type, TMachineType> _states;
         protected TMachineType _activeState;
 
         public void Enter<TState>() where TState : class, IState {
+            if (!_ready)
+                return;
+
             IState state = ChangeState<TState>();
 
             state.Enter();
         }
 
         public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadedState<TPayload> {
+            if (!_ready)
+                return;
+
             IPayloadedState<TPayload> state = ChangeState<TState>();
 
             state.Enter(payload);

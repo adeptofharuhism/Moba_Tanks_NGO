@@ -14,6 +14,8 @@ namespace Assets.CodeBase.Infrastructure.GameStates
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader),
                 [typeof(GameLoopState)] = new GameLoopState(this, services.Single<IInputService>()),
             };
+
+            _ready = true;
         }
     }
 }

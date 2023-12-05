@@ -5,6 +5,7 @@ using Assets.CodeBase.Infrastructure.Services.Input;
 using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.Services.SessionData;
 using Assets.CodeBase.Infrastructure.StateMachine;
+using System;
 using Unity.Netcode;
 
 namespace Assets.CodeBase.Infrastructure.GameStates
@@ -25,15 +26,13 @@ namespace Assets.CodeBase.Infrastructure.GameStates
             RegisterServices();
         }
 
-        public void Enter() {
+        public void Enter() => 
             _sceneLoader.Load(Constants.SceneNames.Initial, OnLoaded);
-        }
 
         public void Exit() { }
 
-        private void OnLoaded() {
+        private void OnLoaded() => 
             _stateMachine.Enter<LoadLevelState, string>(Constants.SceneNames.MainMenu);
-        }
 
         private void RegisterServices() {
             _services.RegisterSingle<IStateMachine>(_stateMachine);

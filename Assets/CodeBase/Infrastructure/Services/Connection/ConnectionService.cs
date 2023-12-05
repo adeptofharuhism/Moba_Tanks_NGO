@@ -33,8 +33,12 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
             _states = new Dictionary<Type, IConnectionExitableState>() {
                 [typeof(OfflineState)] = new OfflineState(this, gameStateMachine, networkService),
                 [typeof(StartingHostState)] = new StartingHostState(this, gameStateMachine, networkService, this, sessionData),
-                [typeof(HostingState)] = new HostingState(this, gameStateMachine, networkService, this, sessionData)
+                [typeof(HostingState)] = new HostingState(this, gameStateMachine, networkService, this, sessionData),
+                [typeof(ClientConnectingState)] = new ClientConnectingState(this, gameStateMachine, networkService, this, sessionData),
+                [typeof(ClientConnectedState)] = new ClientConnectedState(this, gameStateMachine, networkService, this, sessionData)
             };
+
+            _ready = true;
         }
 
         public void Initialize() {
@@ -43,6 +47,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
             _networkService.NetworkManager.OnServerStarted += () => _activeState.OnServerStarted();
             _networkService.NetworkManager.OnServerStopped += _ => _activeState.OnServerStopped();
             _networkService.NetworkManager.OnTransportFailure += () => _activeState.OnTransportFailure();
+            _networkService.NetworkManager.OnClientConnectedCallback += _ => _activeState.OnClientConnected();
+            _networkService.NetworkManager.OnClientDisconnectCallback += _ => _activeState.OnClientDisconnect();
         }
 
         public void StartHostIP(string playerName, string ipaddress, int port) {
@@ -51,6 +57,14 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
             _port = port;
 
             _activeState.StartHostIP();
+        }
+
+        public void StartClientIP(string playerName, string ipaddress, int port) {
+            _playerName = playerName;
+            _ipaddress = ipaddress;
+            _port = port;
+
+            _activeState.StartClientIP();
         }
 
         public void RequestShutdown() {
@@ -65,6 +79,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         int Port { get; }
 
         void RequestShutdown();
+        void StartClientIP(string playerName, string ipaddress, int port);
         void StartHostIP(string playerName, string ipaddress, int port);
     }
 }

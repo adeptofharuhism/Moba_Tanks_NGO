@@ -14,6 +14,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
     {
         void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response);
 
+        void OnClientConnected();
+        void OnClientDisconnect();
         void OnServerStarted();
         void OnServerStopped();
         void OnTransportFailure();
@@ -42,6 +44,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public virtual void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) { }
 
+        public virtual void OnClientConnected() { }
+        public virtual void OnClientDisconnect() { }
         public virtual void OnServerStarted() { }
         public virtual void OnServerStopped() { }
         public virtual void OnTransportFailure() { }
@@ -66,6 +70,9 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         }
 
         public override void Exit() { }
+
+        public override void StartClientIP() =>
+            _connectionStateMachine.Enter<ClientConnectingState>();
 
         public override void StartHostIP() =>
             _connectionStateMachine.Enter<StartingHostState>();
@@ -94,6 +101,27 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         public override void OnUserRequestedShutdown() {
             _connectionStateMachine.Enter<OfflineState>();
         }
+
+        protected void SetupConnection() {
+            SetConnectionPayload(GetPlayerGuid(), _connectionService.PlayerName);
+            UnityTransport utp = (UnityTransport)_networkService.NetworkManager.NetworkConfig.NetworkTransport;
+            utp.SetConnectionData(_connectionService.IPAddress, (ushort)_connectionService.Port);
+        }
+
+        private void SetConnectionPayload(string playerId, string playerName) {
+            string payload = JsonUtility.ToJson(new ConnectionPayload() {
+                PlayerId = playerId,
+                PlayerName = playerName,
+                IsDebug = Debug.isDebugBuild
+            });
+
+            byte[] payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);
+
+            _networkService.NetworkManager.NetworkConfig.ConnectionData = payloadBytes;
+        }
+
+        private string GetPlayerGuid() =>
+            Guid.NewGuid().ToString();
     }
 
     public class HostingState : OnlineState
@@ -155,7 +183,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         private void StartHost() {
             try {
-                SetupHostConnection();
+                SetupConnection();
 
                 if (!_networkService.NetworkManager.StartHost())
                     StartHostFailed();
@@ -166,30 +194,73 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             }
         }
 
-        private void SetupHostConnection() {
-            SetConnectionPayload(GetPlayerGuid(), _connectionService.PlayerName);
-            UnityTransport utp = (UnityTransport)_networkService.NetworkManager.NetworkConfig.NetworkTransport;
-            utp.SetConnectionData(_connectionService.IPAddress, (ushort)_connectionService.Port);
-        }
-
-        private string GetPlayerGuid() =>
-            Guid.NewGuid().ToString();
-
-        private void SetConnectionPayload(string playerId, string playerName) {
-            string payload = JsonUtility.ToJson(new ConnectionPayload() {
-                PlayerId = playerId,
-                PlayerName = playerName,
-                IsDebug = Debug.isDebugBuild
-            });
-
-            byte[] payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);
-
-            _networkService.NetworkManager.NetworkConfig.ConnectionData = payloadBytes;
-        }
-
         private void StartHostFailed() {
             Debug.Log("Starting Host Failed");
+
             _connectionStateMachine.Enter<OfflineState>();
         }
+    }
+
+    public class ClientConnectingState : OnlineState
+    {
+        public ClientConnectingState(
+            IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
+            INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
+            : base(connectionStateMachine, gameStateMachine, networkService, connectionService, sessionData) { }
+
+        public override void Enter() {
+            Debug.Log("Starting Client State");
+
+            StartClient();
+        }
+
+        public override void Exit() { }
+
+        public override void OnClientConnected() {
+            _connectionStateMachine.Enter<ClientConnectedState>();
+        }
+
+        public override void OnClientDisconnect() =>
+            StartingClientFailed();
+
+        private void StartClient() {
+            try {
+                SetupConnection();
+
+                if (!_networkService.NetworkManager.StartClient())
+                    StartingClientFailed();
+
+            } catch (Exception e) {
+                Debug.LogError("Error connecting client, see following exception");
+                Debug.LogException(e);
+                
+                StartingClientFailed();
+                throw;
+            }
+        }
+
+        private void StartingClientFailed() {
+            Debug.LogWarning("Starting client failed");
+            Debug.LogWarning(_networkService.NetworkManager.DisconnectReason);
+
+            _connectionStateMachine.Enter<OfflineState>();
+        }
+    }
+
+    public class ClientConnectedState : OnlineState
+    {
+        public ClientConnectedState(
+            IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
+            INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
+            : base(connectionStateMachine, gameStateMachine, networkService, connectionService, sessionData) { }
+
+        public override void Enter() {
+            Debug.Log("Client Connected State");
+        }
+
+        public override void Exit() { }
+
+        public override void OnClientDisconnect() => 
+            _connectionStateMachine.Enter<OfflineState>();
     }
 }
