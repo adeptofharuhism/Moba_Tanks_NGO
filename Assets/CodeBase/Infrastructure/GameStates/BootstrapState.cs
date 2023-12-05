@@ -3,6 +3,7 @@ using Assets.CodeBase.Infrastructure.Services.Connection;
 using Assets.CodeBase.Infrastructure.Services.Connection.States;
 using Assets.CodeBase.Infrastructure.Services.Input;
 using Assets.CodeBase.Infrastructure.Services.Network;
+using Assets.CodeBase.Infrastructure.Services.SessionData;
 using Assets.CodeBase.Infrastructure.StateMachine;
 using Unity.Netcode;
 
@@ -38,6 +39,7 @@ namespace Assets.CodeBase.Infrastructure.GameStates
             _services.RegisterSingle<IStateMachine>(_stateMachine);
             _services.RegisterSingle(PrepareInputService());
 
+            _services.RegisterSingle<ISessionDataService>(new SessionDataService());
             _services.RegisterSingle(PrepareNetworkService());
             _services.RegisterSingle(PrepareConnectionService());
         }
@@ -58,7 +60,8 @@ namespace Assets.CodeBase.Infrastructure.GameStates
         private IConnectionService PrepareConnectionService() {
             ConnectionService connService = new ConnectionService(
                 _services.Single<IStateMachine>(),
-                _services.Single<INetworkService>());
+                _services.Single<INetworkService>(),
+                _services.Single<ISessionDataService>());
 
             connService.Initialize();
             connService.Enter<OfflineState>();

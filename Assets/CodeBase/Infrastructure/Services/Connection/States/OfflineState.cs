@@ -1,7 +1,9 @@
 ﻿using Assets.CodeBase.Infrastructure.GameStates;
 using Assets.CodeBase.Infrastructure.Services.Network;
+using Assets.CodeBase.Infrastructure.Services.SessionData;
 using Assets.CodeBase.Infrastructure.StateMachine;
 using System;
+using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +12,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 {
     public interface IConnectionExitableState : IExitableState
     {
+        void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response);
+
         void OnServerStarted();
         void OnServerStopped();
         void OnTransportFailure();
@@ -35,6 +39,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public abstract void Enter();
         public abstract void Exit();
+
+        public virtual void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) { }
 
         public virtual void OnServerStarted() { }
         public virtual void OnServerStopped() { }
@@ -70,12 +76,15 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         protected const string ClientGUIDKey = "client_guid";
 
         protected readonly IConnectionService _connectionService;
+        protected readonly ISessionDataService _sessionData;
 
         public OnlineState(
-            IStateMachine connectionStateMachine, IStateMachine gameStateMachine, INetworkService networkService, IConnectionService connectionService)
+            IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
+            INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
             : base(connectionStateMachine, gameStateMachine, networkService) {
 
             _connectionService = connectionService;
+            _sessionData = sessionData;
         }
 
         public override void OnTransportFailure() {
@@ -89,13 +98,15 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
     public class HostingState : OnlineState
     {
-        public HostingState(IStateMachine connectionStateMachine, IStateMachine gameStateMachine, INetworkService networkService, IConnectionService connectionService) : base(connectionStateMachine, gameStateMachine, networkService, connectionService) {
-        }
+        public HostingState(
+            IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
+            INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
+            : base(connectionStateMachine, gameStateMachine, networkService, connectionService, sessionData) { }
 
         public override void Enter() {
             Debug.Log("Hosting State");
 
-
+            _networkService.NetworkManager.SceneManager.LoadScene(Constants.SceneNames.LobbyMenu, LoadSceneMode.Single);
         }
 
         public override void Exit() { }
@@ -104,8 +115,9 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
     public class StartingHostState : OnlineState
     {
         public StartingHostState(
-            IStateMachine connectionStateMachine, IStateMachine gameStateMachine, INetworkService networkService, IConnectionService connectionService)
-            : base(connectionStateMachine, gameStateMachine, networkService, connectionService) { }
+            IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
+            INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
+            : base(connectionStateMachine, gameStateMachine, networkService, connectionService, sessionData) { }
 
         public override void Enter() {
             Debug.Log("Starting Host State");
@@ -124,9 +136,26 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         public override void OnServerStopped() =>
             StartHostFailed();
 
+        public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
+            byte[] connectionData = request.Payload;
+            ulong clientId = request.ClientNetworkId;
+
+            if (clientId != _networkService.NetworkManager.LocalClientId)
+                return;
+
+            string payload = System.Text.Encoding.UTF8.GetString(connectionData);
+            var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
+
+            _sessionData.SetupConnectingPlayerSessionData(clientId, connectionPayload.PlayerId,
+                new SessionPlayerData(clientId, connectionPayload.PlayerName, true));
+
+            response.Approved = true;
+            response.CreatePlayerObject = true;
+        }
+
         private void StartHost() {
             try {
-                SetupHostConnectionAsync();
+                SetupHostConnection();
 
                 if (!_networkService.NetworkManager.StartHost())
                     StartHostFailed();
@@ -137,7 +166,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             }
         }
 
-        private void SetupHostConnectionAsync() {
+        private void SetupHostConnection() {
             SetConnectionPayload(GetPlayerGuid(), _connectionService.PlayerName);
             UnityTransport utp = (UnityTransport)_networkService.NetworkManager.NetworkConfig.NetworkTransport;
             utp.SetConnectionData(_connectionService.IPAddress, (ushort)_connectionService.Port);
