@@ -17,6 +17,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
 
     public class ConnectionService : BaseStateMachine<IConnectionExitableState>, IConnectionService
     {
+        public const int MaxConnectedPlayersConst = 4;
+
         private readonly INetworkService _networkService;
 
         private string _playerName;
@@ -26,6 +28,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         public string PlayerName => _playerName;
         public string IPAddress => _ipaddress;
         public int Port => _port;
+        public int MaxConnectedPlayers => MaxConnectedPlayersConst;
 
         public ConnectionService(IStateMachine gameStateMachine, INetworkService networkService, ISessionDataService sessionData) {
             _networkService = networkService;
@@ -77,6 +80,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         string PlayerName { get; }
         string IPAddress { get; }
         int Port { get; }
+        int MaxConnectedPlayers { get; }
 
         void RequestShutdown();
         void StartClientIP(string playerName, string ipaddress, int port);

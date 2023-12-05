@@ -126,6 +126,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
     public class HostingState : OnlineState
     {
+        private const int MaxConnectPayload = 1024;
+
         public HostingState(
             IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
             INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
@@ -138,6 +140,38 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         }
 
         public override void Exit() { }
+
+        public override void OnServerStopped() =>
+            _connectionStateMachine.Enter<OfflineState>();
+
+        public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
+            response.Approved = false;
+
+            byte[] connectionData = request.Payload;
+            if (connectionData.Length > MaxConnectPayload)
+                return;
+
+            if (_networkService.NetworkManager.ConnectedClientsIds.Count >= _connectionService.MaxConnectedPlayers)
+                return;
+
+            string payload = System.Text.Encoding.UTF8.GetString(connectionData);
+            ConnectionPayload connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
+
+            if (connectionPayload.IsDebug != Debug.isDebugBuild)
+                return;
+
+            if (_sessionData.IsDuplicateConnection(connectionPayload.PlayerId))
+                return;
+
+            ulong clientId = request.ClientNetworkId;
+            _sessionData.SetupConnectingPlayerSessionData(clientId, connectionPayload.PlayerId,
+                new SessionPlayerData(clientId, connectionPayload.PlayerName, true));
+
+            response.Approved = true;
+            response.CreatePlayerObject = true;
+            response.Position = Vector3.zero;
+            response.Rotation = Quaternion.identity;
+        }
     }
 
     public class StartingHostState : OnlineState
@@ -165,14 +199,14 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             StartHostFailed();
 
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
-            byte[] connectionData = request.Payload;
             ulong clientId = request.ClientNetworkId;
 
             if (clientId != _networkService.NetworkManager.LocalClientId)
                 return;
 
+            byte[] connectionData = request.Payload;
             string payload = System.Text.Encoding.UTF8.GetString(connectionData);
-            var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
+            ConnectionPayload connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
 
             _sessionData.SetupConnectingPlayerSessionData(clientId, connectionPayload.PlayerId,
                 new SessionPlayerData(clientId, connectionPayload.PlayerName, true));
@@ -233,7 +267,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             } catch (Exception e) {
                 Debug.LogError("Error connecting client, see following exception");
                 Debug.LogException(e);
-                
+
                 StartingClientFailed();
                 throw;
             }
@@ -241,7 +275,6 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         private void StartingClientFailed() {
             Debug.LogWarning("Starting client failed");
-            Debug.LogWarning(_networkService.NetworkManager.DisconnectReason);
 
             _connectionStateMachine.Enter<OfflineState>();
         }
@@ -260,7 +293,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public override void Exit() { }
 
-        public override void OnClientDisconnect() => 
+        public override void OnClientDisconnect() =>
             _connectionStateMachine.Enter<OfflineState>();
     }
 }
