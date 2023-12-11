@@ -47,11 +47,13 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         public void Initialize() {
             _networkService.NetworkManager.ConnectionApprovalCallback += 
                 (request, response) => _activeState.ApprovalCheck(request, response);
+
             _networkService.NetworkManager.OnServerStarted += () => _activeState.OnServerStarted();
-            _networkService.NetworkManager.OnServerStopped += _ => _activeState.OnServerStopped();
             _networkService.NetworkManager.OnTransportFailure += () => _activeState.OnTransportFailure();
-            _networkService.NetworkManager.OnClientConnectedCallback += _ => _activeState.OnClientConnected();
-            _networkService.NetworkManager.OnClientDisconnectCallback += _ => _activeState.OnClientDisconnect();
+
+            _networkService.NetworkManager.OnServerStopped += _ => _activeState.OnServerStopped();
+            _networkService.NetworkManager.OnClientConnectedCallback += clientId => _activeState.OnClientConnected(clientId);
+            _networkService.NetworkManager.OnClientDisconnectCallback += clientId => _activeState.OnClientDisconnect(clientId);
         }
 
         public void StartHostIP(string playerName, string ipaddress, int port) {

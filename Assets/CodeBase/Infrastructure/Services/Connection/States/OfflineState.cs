@@ -14,8 +14,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
     {
         void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response);
 
-        void OnClientConnected();
-        void OnClientDisconnect();
+        void OnClientConnected(ulong clientId);
+        void OnClientDisconnect(ulong clientId);
         void OnServerStarted();
         void OnServerStopped();
         void OnTransportFailure();
@@ -44,8 +44,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public virtual void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) { }
 
-        public virtual void OnClientConnected() { }
-        public virtual void OnClientDisconnect() { }
+        public virtual void OnClientConnected(ulong clientId) { }
+        public virtual void OnClientDisconnect(ulong clientId) { }
         public virtual void OnServerStarted() { }
         public virtual void OnServerStopped() { }
         public virtual void OnTransportFailure() { }
@@ -85,6 +85,16 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         protected readonly IConnectionService _connectionService;
         protected readonly ISessionDataService _sessionData;
 
+        private static string _playerGuid = null;
+        private string PlayerGuid {
+            get {
+                if (_playerGuid == null)
+                    _playerGuid = Guid.NewGuid().ToString();
+
+                return _playerGuid;
+            }
+        }
+
         public OnlineState(
             IStateMachine connectionStateMachine, IStateMachine gameStateMachine,
             INetworkService networkService, IConnectionService connectionService, ISessionDataService sessionData)
@@ -103,7 +113,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
         }
 
         protected void SetupConnection() {
-            SetConnectionPayload(GetPlayerGuid(), _connectionService.PlayerName);
+            SetConnectionPayload(PlayerGuid, _connectionService.PlayerName);
             UnityTransport utp = (UnityTransport)_networkService.NetworkManager.NetworkConfig.NetworkTransport;
             utp.SetConnectionData(_connectionService.IPAddress, (ushort)_connectionService.Port);
         }
@@ -120,8 +130,6 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             _networkService.NetworkManager.NetworkConfig.ConnectionData = payloadBytes;
         }
 
-        private string GetPlayerGuid() =>
-            Guid.NewGuid().ToString();
     }
 
     public class HostingState : OnlineState
@@ -139,10 +147,25 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             _networkService.NetworkManager.SceneManager.LoadScene(Constants.SceneNames.LobbyMenu, LoadSceneMode.Single);
         }
 
-        public override void Exit() { }
+        public override void Exit() {
+            _sessionData.OnServerEnded();
+        }
+
+        public override void OnClientDisconnect(ulong clientId) {
+            if (clientId == _networkService.NetworkManager.LocalClientId)
+                return;
+
+            _sessionData.DisconnectClient(clientId);
+        }
 
         public override void OnServerStopped() =>
             _connectionStateMachine.Enter<OfflineState>();
+
+        public override void OnUserRequestedShutdown() {
+            DisconnectAllClients();
+
+            base.OnUserRequestedShutdown();
+        }
 
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
             response.Approved = false;
@@ -171,6 +194,14 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
             response.CreatePlayerObject = true;
             response.Position = Vector3.zero;
             response.Rotation = Quaternion.identity;
+        }
+
+        private void DisconnectAllClients() {
+            for (int i = _networkService.NetworkManager.ConnectedClientsIds.Count - 1; i >= 0; i--) {
+                ulong id = _networkService.NetworkManager.ConnectedClientsIds[i];
+                if (id != _networkService.NetworkManager.LocalClientId)
+                    _networkService.NetworkManager.DisconnectClient(id);
+            }
         }
     }
 
@@ -250,11 +281,11 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public override void Exit() { }
 
-        public override void OnClientConnected() {
+        public override void OnClientConnected(ulong clientId) {
             _connectionStateMachine.Enter<ClientConnectedState>();
         }
 
-        public override void OnClientDisconnect() =>
+        public override void OnClientDisconnect(ulong clientId) =>
             StartingClientFailed();
 
         private void StartClient() {
@@ -293,7 +324,7 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection.States
 
         public override void Exit() { }
 
-        public override void OnClientDisconnect() =>
+        public override void OnClientDisconnect(ulong clientId) =>
             _connectionStateMachine.Enter<OfflineState>();
     }
 }

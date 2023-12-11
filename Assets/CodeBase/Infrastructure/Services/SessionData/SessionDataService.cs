@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.CodeBase.Infrastructure.Services.SessionData
@@ -19,12 +16,21 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
             ClientID = clientId;
             PlayerName = name;
         }
+
+        public void Reinitalize() { }
     }
 
     public interface ISessionDataService : IService
     {
         bool IsDuplicateConnection(string playerId);
         void SetupConnectingPlayerSessionData(ulong clientId, string playerId, SessionPlayerData sessionPlayerData);
+        SessionPlayerData? GetPlayerData(ulong clientId);
+        SessionPlayerData? GetPlayerData(string playerId);
+        string GetPlayerId(ulong clientId);
+        void DisconnectClient(ulong clientId);
+        void OnServerEnded();
+        void OnSessionStarted();
+        void OnSessionEnded();
     }
 
     public class SessionDataService : ISessionDataService
@@ -32,12 +38,56 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         private Dictionary<string, SessionPlayerData> _clientData;
         private Dictionary<ulong, string> _clientIdToPlayerId;
 
+        private bool _sessionHasStarted;
+
         public SessionDataService() {
             _clientData = new Dictionary<string, SessionPlayerData>();
             _clientIdToPlayerId = new Dictionary<ulong, string>();
         }
 
-        public bool IsDuplicateConnection(string playerId) => 
+        public void DisconnectClient(ulong clientId) {
+            if (!_clientIdToPlayerId.TryGetValue(clientId, out string playerId))
+                return;
+
+            if (!_sessionHasStarted)
+                _clientIdToPlayerId.Remove(clientId);
+
+            SessionPlayerData? playerData = GetPlayerData(playerId);
+            if (playerData == null)
+                return;
+
+            if (clientId != playerData.Value.ClientID)
+                return;
+
+            if (_sessionHasStarted)
+                MarkClientDataAsDisconnected(clientId, playerId);
+            else
+                _clientData.Remove(playerId);
+        }
+
+        public SessionPlayerData? GetPlayerData(ulong clientId) {
+            string playerId = GetPlayerId(clientId);
+            if (playerId != null)
+                return GetPlayerData(playerId);
+
+            return null;
+        }
+
+        public SessionPlayerData? GetPlayerData(string playerId) {
+            if (_clientData.TryGetValue(playerId, out SessionPlayerData playerData))
+                return playerData;
+
+            return null;
+        }
+
+        public string GetPlayerId(ulong clientId) {
+            if (_clientIdToPlayerId.TryGetValue(clientId, out string playerId))
+                return playerId;
+
+            return null;
+        }
+
+        public bool IsDuplicateConnection(string playerId) =>
             _clientData.ContainsKey(playerId) && _clientData[playerId].IsConnected;
 
         public void SetupConnectingPlayerSessionData(ulong clientId, string playerId, SessionPlayerData sessionPlayerData) {
@@ -56,6 +106,56 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
             _clientData[playerId] = sessionPlayerData;
 
             Debug.Log($"Connected {sessionPlayerData.PlayerName} with ClientID {clientId} and PlayerID {playerId}");
+        }
+
+        public void OnSessionStarted() =>
+            _sessionHasStarted = true;
+
+        public void OnSessionEnded() {
+            ClearDisconnectedPlayersData();
+            ReinitializePlayersData();
+
+            _sessionHasStarted = false;
+        }
+
+        private void ClearDisconnectedPlayersData() {
+            List<ulong> idsToClear = new List<ulong>();
+            foreach(ulong id in _clientIdToPlayerId.Keys) {
+                SessionPlayerData? data = GetPlayerData(id);
+                if (data is { IsConnected: false })
+                    idsToClear.Add(id);
+            }
+
+            foreach (ulong id in idsToClear) {
+                string playerId = _clientIdToPlayerId[id];
+                var playerData = GetPlayerData(playerId);
+                if (playerData != null && playerData.Value.ClientID == id)
+                    _clientData.Remove(playerId);
+
+                _clientIdToPlayerId.Remove(id);
+            }
+        }
+
+        private void ReinitializePlayersData() {
+            foreach (ulong id in _clientIdToPlayerId.Keys) {
+                string playerId = _clientIdToPlayerId[id];
+                SessionPlayerData sessionPlayerData = _clientData[playerId];
+                sessionPlayerData.Reinitalize();
+                _clientData[playerId] = sessionPlayerData;
+            }
+        }
+
+        public void OnServerEnded() {
+            _clientData.Clear();
+            _clientIdToPlayerId.Clear();
+
+            _sessionHasStarted = false;
+        }
+
+        private void MarkClientDataAsDisconnected(ulong clientId, string playerId) {
+            SessionPlayerData clientData = _clientData[playerId];
+            clientData.IsConnected = false;
+            _clientData[playerId] = clientData;
         }
 
         private bool IsReconnection(string playerId) {
