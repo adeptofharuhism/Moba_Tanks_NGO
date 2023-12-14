@@ -20,23 +20,10 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         public void Reinitalize() { }
     }
 
-    public interface ISessionDataService : IService
-    {
-        bool IsDuplicateConnection(string playerId);
-        void SetupConnectingPlayerSessionData(ulong clientId, string playerId, SessionPlayerData sessionPlayerData);
-        SessionPlayerData? GetPlayerData(ulong clientId);
-        SessionPlayerData? GetPlayerData(string playerId);
-        string GetPlayerId(ulong clientId);
-        void DisconnectClient(ulong clientId);
-        void OnServerEnded();
-        void OnSessionStarted();
-        void OnSessionEnded();
-    }
-
     public class SessionDataService : ISessionDataService
     {
-        private Dictionary<string, SessionPlayerData> _clientData;
-        private Dictionary<ulong, string> _clientIdToPlayerId;
+        private readonly Dictionary<string, SessionPlayerData> _clientData;
+        private readonly Dictionary<ulong, string> _clientIdToPlayerId;
 
         private bool _sessionHasStarted;
 
@@ -60,9 +47,13 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
                 return;
 
             if (_sessionHasStarted)
-                MarkClientDataAsDisconnected(clientId, playerId);
+                MarkClientDataAsDisconnected(playerId);
             else
                 _clientData.Remove(playerId);
+        }
+
+        public void SetPlayerData(ulong clientId, SessionPlayerData playerData) {
+
         }
 
         public SessionPlayerData? GetPlayerData(ulong clientId) {
@@ -119,7 +110,7 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         }
 
         private void ClearDisconnectedPlayersData() {
-            List<ulong> idsToClear = new List<ulong>();
+            List<ulong> idsToClear = new();
             foreach(ulong id in _clientIdToPlayerId.Keys) {
                 SessionPlayerData? data = GetPlayerData(id);
                 if (data is { IsConnected: false })
@@ -152,7 +143,7 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
             _sessionHasStarted = false;
         }
 
-        private void MarkClientDataAsDisconnected(ulong clientId, string playerId) {
+        private void MarkClientDataAsDisconnected(string playerId) {
             SessionPlayerData clientData = _clientData[playerId];
             clientData.IsConnected = false;
             _clientData[playerId] = clientData;

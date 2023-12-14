@@ -1,4 +1,6 @@
 ﻿using Assets.CodeBase.Infrastructure.Services.Connection.States;
+using Assets.CodeBase.Infrastructure.Services.Connection.States.Offline;
+using Assets.CodeBase.Infrastructure.Services.Connection.States.Online;
 using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.Services.SessionData;
 using Assets.CodeBase.Infrastructure.StateMachine;
@@ -24,11 +26,13 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         private string _playerName;
         private string _ipaddress;
         private int _port;
+        private string _playerGuid;
 
         public string PlayerName => _playerName;
         public string IPAddress => _ipaddress;
         public int Port => _port;
         public int MaxConnectedPlayers => MaxConnectedPlayersConst;
+        public string PlayerGuid => _playerGuid;
 
         public ConnectionService(IStateMachine gameStateMachine, INetworkService networkService, ISessionDataService sessionData) {
             _networkService = networkService;
@@ -54,6 +58,8 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
             _networkService.NetworkManager.OnServerStopped += _ => _activeState.OnServerStopped();
             _networkService.NetworkManager.OnClientConnectedCallback += clientId => _activeState.OnClientConnected(clientId);
             _networkService.NetworkManager.OnClientDisconnectCallback += clientId => _activeState.OnClientDisconnect(clientId);
+
+            _playerGuid = Guid.NewGuid().ToString();
         }
 
         public void StartHostIP(string playerName, string ipaddress, int port) {
@@ -75,17 +81,5 @@ namespace Assets.CodeBase.Infrastructure.Services.Connection
         public void RequestShutdown() {
             _activeState.OnUserRequestedShutdown();
         }
-    }
-
-    public interface IConnectionService : IService
-    {
-        string PlayerName { get; }
-        string IPAddress { get; }
-        int Port { get; }
-        int MaxConnectedPlayers { get; }
-
-        void RequestShutdown();
-        void StartClientIP(string playerName, string ipaddress, int port);
-        void StartHostIP(string playerName, string ipaddress, int port);
     }
 }

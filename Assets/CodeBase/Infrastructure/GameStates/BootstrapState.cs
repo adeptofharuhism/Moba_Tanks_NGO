@@ -1,6 +1,6 @@
 ﻿using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.Connection;
-using Assets.CodeBase.Infrastructure.Services.Connection.States;
+using Assets.CodeBase.Infrastructure.Services.Connection.States.Offline;
 using Assets.CodeBase.Infrastructure.Services.Input;
 using Assets.CodeBase.Infrastructure.Services.Network;
 using Assets.CodeBase.Infrastructure.Services.SessionData;
