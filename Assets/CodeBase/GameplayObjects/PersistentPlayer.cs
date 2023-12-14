@@ -1,5 +1,6 @@
 ﻿using Assets.CodeBase.Infrastructure.Services;
 using Assets.CodeBase.Infrastructure.Services.SessionData;
+using Assets.CodeBase.Networking;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ namespace Assets.CodeBase.GameplayObjects
     {
         private const string PersistentPlayerString = "PersistentPlayer";
 
-        [SerializeField]
-        private PersistentPlayerRuntimeCollection _persistentPlayerRuntimeCollection;
+        [SerializeField] private PersistentPlayerRuntimeCollection _persistentPlayerRuntimeCollection;
+        [SerializeField] private NetworkName _networkName;
 
         private ISessionDataService _sessionData;
 
@@ -33,8 +34,7 @@ namespace Assets.CodeBase.GameplayObjects
             if (sessionPlayerData == null)
                 return;
 
-            SessionPlayerData playerData = sessionPlayerData.Value;
-            
+            _networkName.Name.Value = sessionPlayerData.Value.PlayerName;
         }
     }
 }
