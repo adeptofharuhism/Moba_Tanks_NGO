@@ -53,7 +53,11 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         }
 
         public void SetPlayerData(ulong clientId, SessionPlayerData playerData) {
+            string playerId = GetPlayerId(clientId);
+            if (playerId == null)
+                return;
 
+            _clientData[playerId] = playerData;
         }
 
         public SessionPlayerData? GetPlayerData(ulong clientId) {

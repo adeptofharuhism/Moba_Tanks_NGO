@@ -10,13 +10,13 @@ namespace Assets.CodeBase.UI.LobbyMenu
         [SerializeField] private TMP_Text _playerNameText;
         [SerializeField] private GameObject _playerReadyObject;
 
-        public void SetPlayerReady(bool isReady) => 
+        public void SetPlayerReady(bool isReady) =>
             _playerReadyObject.SetActive(isReady);
 
-        public void SetPlayerNameText(string playerName) => 
+        public void SetPlayerNameText(string playerName) =>
             _playerNameText.text = playerName;
 
-        public void SetPlayerColor(Color color) => 
+        public void SetPlayerColor(Color color) =>
             _playerColor.color = color;
     }
 }

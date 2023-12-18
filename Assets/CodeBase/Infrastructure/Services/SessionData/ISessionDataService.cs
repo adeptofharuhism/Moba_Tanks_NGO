@@ -11,5 +11,6 @@
         void OnServerEnded();
         void OnSessionStarted();
         void OnSessionEnded();
+        void SetPlayerData(ulong ownerClientId, SessionPlayerData playerData);
     }
 }

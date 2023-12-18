@@ -695,7 +695,6 @@ GameObject:
   - component: {fileID: 957020531}
   - component: {fileID: 957020534}
   - component: {fileID: 957020533}
-  - component: {fileID: 957020532}
   m_Layer: 5
   m_Name: MapSettingsOverview
   m_TagString: Untagged
@@ -723,23 +722,6 @@ RectTransform:
   m_AnchoredPosition: {x: 10, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &957020532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957020530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f49959f2a7cb53419b0f987d4c8ceaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cancelButton: {fileID: 0}
-  _startHostingButton: {fileID: 0}
-  _hostIPAddress: {fileID: 0}
-  _hostPort: {fileID: 0}
-  _playerName: {fileID: 0}
 --- !u!114 &957020533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1221,6 +1203,7 @@ GameObject:
   - component: {fileID: 1418189736}
   - component: {fileID: 1418189735}
   - component: {fileID: 1418189734}
+  - component: {fileID: 1418189738}
   m_Layer: 5
   m_Name: LobbyCanvas
   m_TagString: Untagged
@@ -1311,6 +1294,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1418189738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418189733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea5b083a6e66a342a88fc21e51973df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _persistentPlayerRuntimeCollection: {fileID: 11400000, guid: 9729cd5088ce7094ab7ce60fb716b772,
+    type: 2}
+  _playerStatusContainerLobbyPrefab: {fileID: 8789925170161667003, guid: f0f44b50bbb089f4eb851aba2c92423b,
+    type: 3}
+  _playersContainer: {fileID: 1568516173}
+  _playerStatusContainerPadding: 10
 --- !u!1 &1568516172
 GameObject:
   m_ObjectHideFlags: 0
