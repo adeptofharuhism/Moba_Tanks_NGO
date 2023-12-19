@@ -10,11 +10,14 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         public ulong ClientID;
 
         public string PlayerName;
+        public ushort SpawnID;
 
         public SessionPlayerData(ulong clientId, string name, bool isConnected = false) {
             IsConnected = isConnected;
             ClientID = clientId;
             PlayerName = name;
+
+            SpawnID = 0;
         }
 
         public void Reinitalize() { }
@@ -25,7 +28,7 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
         private readonly Dictionary<string, SessionPlayerData> _clientData;
         private readonly Dictionary<ulong, string> _clientIdToPlayerId;
 
-        private bool _sessionHasStarted;
+        private bool _sessionHasStarted = false;
 
         public SessionDataService() {
             _clientData = new Dictionary<string, SessionPlayerData>();
@@ -92,19 +95,21 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
             }
 
             if (IsReconnection(playerId)) {
+                string playerNewName = sessionPlayerData.PlayerName;
+
                 sessionPlayerData = _clientData[playerId];
                 sessionPlayerData.ClientID = clientId;
+                sessionPlayerData.PlayerName = playerNewName;
                 sessionPlayerData.IsConnected = true;
             }
 
             _clientIdToPlayerId[clientId] = playerId;
             _clientData[playerId] = sessionPlayerData;
-
-            Debug.Log($"Connected {sessionPlayerData.PlayerName} with ClientID {clientId} and PlayerID {playerId}");
         }
 
-        public void OnSessionStarted() =>
+        public void OnSessionStarted() {
             _sessionHasStarted = true;
+        }
 
         public void OnSessionEnded() {
             ClearDisconnectedPlayersData();
@@ -113,9 +118,16 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
             _sessionHasStarted = false;
         }
 
+        public void OnServerEnded() {
+            _clientData.Clear();
+            _clientIdToPlayerId.Clear();
+
+            _sessionHasStarted = false;
+        }
+
         private void ClearDisconnectedPlayersData() {
             List<ulong> idsToClear = new();
-            foreach(ulong id in _clientIdToPlayerId.Keys) {
+            foreach (ulong id in _clientIdToPlayerId.Keys) {
                 SessionPlayerData? data = GetPlayerData(id);
                 if (data is { IsConnected: false })
                     idsToClear.Add(id);
@@ -138,13 +150,6 @@ namespace Assets.CodeBase.Infrastructure.Services.SessionData
                 sessionPlayerData.Reinitalize();
                 _clientData[playerId] = sessionPlayerData;
             }
-        }
-
-        public void OnServerEnded() {
-            _clientData.Clear();
-            _clientIdToPlayerId.Clear();
-
-            _sessionHasStarted = false;
         }
 
         private void MarkClientDataAsDisconnected(string playerId) {

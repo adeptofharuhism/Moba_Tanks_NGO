@@ -12,9 +12,8 @@ namespace Assets.CodeBase.UI.LobbyMenu
 
         private INetworkService _networkService;
 
-        private void Awake() {
+        private void Awake() => 
             _networkService = AllServices.Container.Single<INetworkService>();
-        }
 
         public void Start() {
             if (_networkService.NetworkManager.IsServer) {

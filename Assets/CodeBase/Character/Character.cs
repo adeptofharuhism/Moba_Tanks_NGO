@@ -55,13 +55,19 @@ namespace Assets.CodeBase.Character
         }
 
         [SerializeField] private CinemachineVirtualCamera cameraPrefab;
-        public override void OnNetworkSpawn() {
+        public void Start() {
             if (IsOwner) {
-                CinemachineVirtualCamera virtualCamera = Instantiate(cameraPrefab);
-
-                virtualCamera.LookAt = transform;
-                virtualCamera.Follow = transform;
+                StartCoroutine(CameraSpawnDelay());
             }
+        }
+
+        System.Collections.IEnumerator CameraSpawnDelay() {
+            yield return new WaitForSeconds(6);
+            Debug.Log("Im owner");
+            CinemachineVirtualCamera virtualCamera = Instantiate(cameraPrefab);
+            Debug.Log("Im spawning");
+            virtualCamera.LookAt = transform;
+            virtualCamera.Follow = transform;
         }
     }
 }
