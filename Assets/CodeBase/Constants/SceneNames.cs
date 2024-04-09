@@ -2,10 +2,10 @@
 {
     public static class SceneNames
     {
-        public static string Initial = "Initial";
-        public static string Main = "Main";
-        public static string MainMenu = "MainMenu";
-        public static string LobbyMenu = "LobbyMenu";
-        public static string Test = "Test";
+        public const string Initial = "Initial";
+        public const string Main = "Main";
+        public const string MainMenu = "MainMenu";
+        public const string LobbyMenu = "LobbyMenu";
+        public const string Test = "Test";
     }
 }

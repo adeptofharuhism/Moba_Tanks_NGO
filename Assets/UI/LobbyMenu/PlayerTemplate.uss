@@ -1,0 +1,19 @@
+.playerColor {
+    background-color: rgb(255, 255, 255);
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 17%;
+}
+
+.playerName {
+    -unity-text-align: middle-left;
+    font-size: 45px;
+    -unity-font-style: normal;
+    -unity-font-definition: url('project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=bc5e4da9fb2069845a80b651cc0a4b10&type=3#NotInter-Regular');
+}

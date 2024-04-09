@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="PlayerTemplate" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="Color" class="playerColor" />
+        <ui:Label tabindex="-1" text="PlayerName" display-tooltip-when-elided="true" name="Name" class="playerName" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

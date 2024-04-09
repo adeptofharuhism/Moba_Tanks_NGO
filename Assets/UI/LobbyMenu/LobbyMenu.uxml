@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="PlayerTemplate" src="project://database/Assets/UI/LobbyMenu/PlayerTemplate.uxml?fileID=9197481963319205126&amp;guid=dbdca9873a63e8748bc0ac6d26384824&amp;type=3#PlayerTemplate" />
+    <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=242623ebb517c1f48ac648e21cd17999&amp;type=3#MainMenu" />
+    <Style src="project://database/Assets/UI/LobbyMenu/PlayerTemplate.uss?fileID=7433441132597879392&amp;guid=b8dbbff6fd275f84fa6c69659d9e53e7&amp;type=3#PlayerTemplate" />
+    <ui:VisualElement name="RootPanel" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="MenuOptionsPanel" class="panel leftSidePanel">
+            <ui:Label tabindex="-1" display-tooltip-when-elided="true" text="LOBBY SETTINGS" class="textHeader" />
+            <ui:VisualElement name="PlayersContainer" class="panel" style="flex-grow: 0; min-width: auto; min-height: auto;">
+                <ui:Label tabindex="-1" text="PLAYERS" display-tooltip-when-elided="true" class="textHeader" />
+                <ui:Instance template="PlayerTemplate" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;" />
+            <ui:Button text="To Main Menu" display-tooltip-when-elided="true" name="ToMenuButton" class="textButton button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SettingsContainer" class="rightSidePanel" />
+    </ui:VisualElement>
+</ui:UXML>

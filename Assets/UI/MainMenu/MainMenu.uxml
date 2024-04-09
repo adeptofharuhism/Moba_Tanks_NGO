@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=242623ebb517c1f48ac648e21cd17999&amp;type=3#MainMenu" />
+    <ui:VisualElement name="RootPanel" style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="MenuOptionsPanel" class="panel leftSidePanel">
+            <ui:Label tabindex="-1" text="FORGOTTEN CLICK 2" display-tooltip-when-elided="true" name="GameNameLabel" class="textHeader" />
+            <ui:Button text="Host Lobby" display-tooltip-when-elided="true" name="HostLobbyButton" class="textButton button" />
+            <ui:Button text="Join Lobby" display-tooltip-when-elided="true" name="JoinLobbyButton" class="textButton button" />
+            <ui:VisualElement style="flex-grow: 1; flex-shrink: 0;" />
+            <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitGameButton" class="textButton button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SettingsContainer" class="rightSidePanel" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=242623ebb517c1f48ac648e21cd17999&amp;type=3#MainMenu" />
+    <ui:VisualElement name="JoinLobbySettings" class="panel" style="flex-grow: 1; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="LOBBY SETTINGS" display-tooltip-when-elided="true" name="HostLobbyPanelHeader" class="textHeader" />
+        <ui:VisualElement name="PlayerNamePanel" class="panel" style="flex-direction: row;">
+            <ui:TextField picking-mode="Ignore" label="Player Name:" name="PlayerNameInput" max-length="32" password="false" value="Bingus" placeholder-text="your name" class="textOption innerContentPadding" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="IPAndPortPanel" class="panel" style="flex-direction: row;">
+            <ui:TextField picking-mode="Ignore" label="Host IP:" name="IPInputPanel" max-length="32" password="false" value="127.0.0.1" placeholder-text="host IP address" class="textOption innerContentPadding" style="flex-grow: 1;" />
+            <ui:TextField picking-mode="Ignore" label="Port:" name="PortInputPanel" max-length="5" password="false" value="7777" placeholder-text="host port" class="textOption innerContentPadding" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="JoinLobbyButtonPanel" style="flex-grow: 0; flex-shrink: 0; width: 50%;">
+            <ui:Button text="Join Lobby" display-tooltip-when-elided="true" name="JoinButton" class="textButton button" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-shrink: 0; flex-grow: 1;" />
+        <ui:VisualElement name="CancelButtonPanel" style="flex-grow: 0; flex-shrink: 0; width: 50%;">
+            <ui:Button text="Cancel" display-tooltip-when-elided="true" name="CancelButton" class="textButton button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
