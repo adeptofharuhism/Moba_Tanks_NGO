@@ -15,13 +15,13 @@ MonoBehaviour:
   _carCollisionLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  _maxWheelRotationDegrees: 22
-  _wheelRestDistance: 1.5
+  _maxWheelRotationDegrees: 36
+  _wheelRestDistance: 1.2
   _wheelSpringStrength: 45
   _wheelSpringDamper: 12
   _wheelDiameter: 0.54
-  _maxSpeed: 14
-  _maxSpeedBackward: -6
+  _maxSpeed: 24
+  _maxSpeedBackward: -8
   _enginePower:
     serializedVersion: 2
     m_Curve:
